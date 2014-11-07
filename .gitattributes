@@ -1,2 +1,2 @@
-docs/*.docx diff=word
+docs/*.docx diff=wordx
 docs/*.doc diff=word
