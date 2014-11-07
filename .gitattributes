@@ -1,0 +1,2 @@
+docs/*.docx diff=word
+docs/*.doc diff=word
