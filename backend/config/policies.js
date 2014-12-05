@@ -15,7 +15,7 @@
  * For more information on configuring policies, check out:
  * http://sailsjs.org/#/documentation/reference/sails.config/sails.config.policies.html
  */
-
+var policyBuilder = require('../lib/policyBuilder');
 
 module.exports.policies = {
 
@@ -26,7 +26,14 @@ module.exports.policies = {
   *                                                                          *
   ***************************************************************************/
 
-  // '*': true,
+  '*': ['authenticated'],
+
+  UserController: {
+    'find': ['authenticated'],
+    'update': ['authenticated', 'disableEditOtherUsers', 'isCorrectBlueprintRequest'],
+    'create': policyBuilder.policyOR(['hasMasterToken', 'isAdmin']),
+    'destroy': ['authenticated', 'isAdmin']
+  }
 
   /***************************************************************************
   *                                                                          *

@@ -21,7 +21,10 @@
     "grunt-contrib-uglify": "~0.4.0",
     "grunt-contrib-cssmin": "~0.9.0",
     "grunt-contrib-less": "0.11.1",
-    "grunt-contrib-coffee": "~0.10.1"
+    "grunt-contrib-coffee": "~0.10.1",
+    "passport-local": "^1.0.0",
+    "bcrypt": "^0.8.0",
+    "async": "^0.9.0"
   },
   "scripts": {
     "start": "node app.js",
@@ -33,5 +36,12 @@
     "url": "git://github.com/matijastepanic/backend.git"
   },
   "author": "matijastepanic",
-  "license": ""
+  "license": "",
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "bluebird": "^2.3.11",
+    "request": "^2.49.0",
+    "mocha": "^2.0.1",
+    "grunt-mocha-test": "^0.12.4"
+  }
 }
