@@ -3,6 +3,10 @@
  # @description :: TODO: You might write a short summary of how this model works and what it represents here.
  # @docs        :: http://sailsjs.org/#!documentation/models
 
+unless typeof String::endsWith is "function"
+  String::endsWith = (str) ->
+    @substring(@length - str.length, @length) is str
+
 module.exports =
 
   schema: true
@@ -17,6 +21,8 @@ module.exports =
       return true
     isPasswordConfirmed: (password) ->
       return password is @confirmPassword
+    isFerDomainMail: (email) ->
+      return email.endsWith "@fer.hr"
 
 
   attributes:
@@ -40,6 +46,7 @@ module.exports =
       required: true
       unique: true
       email: true
+      isFerDomainMail: true
 
     roles:
       type: 'array'
@@ -49,6 +56,7 @@ module.exports =
     verifyPassword: (password) ->
       bcrypt = require 'bcrypt'
       return bcrypt.compareSync password, @password
+
 
   beforeCreate: (values, cb) ->
     bcrypt = require 'bcrypt'
