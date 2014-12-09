@@ -10,7 +10,12 @@ grunt.config.set('mochaTest', {
       timeout: 2000
     },
     src: [
-      'test/e2e/user-spec.js'
+      // all describe blocks are run SYNC !!!
+      'test/e2e/user-spec.js',  // should be executed before travel-order because travel-order use
+                                // user object in association, look at global.share variable
+                                // USE: travel-order
+      'test/e2e/budget-source-spec.js', // USE: travel-order
+      'test/e2e/travel-order-spec.js'
     ],
   }
 });

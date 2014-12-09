@@ -13,3 +13,4 @@ module.exports = (req, res, next) ->
       return res.forbidden "Error, changing/setting 'updatedAt' attribute is forbidden!"
 
   next()
+

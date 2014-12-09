@@ -1,20 +1,22 @@
 var chai = require("chai");
-// chai.should();
 chai.use(require('chai-things'));
-
 var expect = chai.expect;
-// var should = chai.should;
 
 var Promise = require("bluebird");
-var Helper = require("../../lib/helpers.js");
 var request = Promise.promisify(require("request"));
+
 var Sails = require('sails');
 var sails;
+
+var Helper = require("../../lib/helpers.js");
+
+var share = {}
 
 global.console.log.verbose = Helper.verbose
 global.request = request
 global.parseJSON = Helper.parseJSON
 global.expect = expect
+global.share = share
 
 // Global before hook
 before(function (done) {

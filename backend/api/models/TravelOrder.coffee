@@ -5,4 +5,14 @@
 
 module.exports =
 
-  attributes: {}
+  attributes:
+    owner:
+      model: 'user'
+    budget:
+      model: 'budgetsource'
+
+  beforeCreate: (values, cb) ->
+    values.owner = current.user.id
+    if values.budgetsourcecode
+      values.budget = current.budgetsource.id
+    cb()

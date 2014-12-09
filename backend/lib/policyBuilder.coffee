@@ -11,6 +11,14 @@ class MockResponse
 # After all policies are complete, policyOR returns a generic json status=400 if OR is false, else calls next() if OR is true.
 # @param argument ([string]) Array of policy names.
 module.exports =
+  disableParams: (argument) ->
+    (req, res, next) ->
+      for param in argument
+        if req.param param
+          return res.forbidden "#{param} attribute is forbidden!"
+      next()
+
+
   policyOR: (argument) ->
     #If policy is successful variable passed is set to true
     passed = false

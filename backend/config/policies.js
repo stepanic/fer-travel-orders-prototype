@@ -33,6 +33,16 @@ module.exports.policies = {
     'update': ['authenticated', 'disableEditOtherUsers', 'isCorrectBlueprintRequest'],
     'create': policyBuilder.policyOR(['hasMasterToken', 'isAdmin']),
     'destroy': ['authenticated', 'isAdmin']
+  },
+
+  TravelOrderController: {
+    'create': ['authenticated', 'disableOwnerAttribute', 'isCorrectBudgetSourceCode']
+  },
+
+  //policyBuilder.disableParams(['owner'])
+
+  BudgetSourceController: {
+    'create': policyBuilder.policyOR(['hasMasterToken', 'isAdmin'])
   }
 
   /***************************************************************************

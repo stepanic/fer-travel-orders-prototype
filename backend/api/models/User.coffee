@@ -9,8 +9,6 @@ unless typeof String::endsWith is "function"
 
 module.exports =
 
-  schema: true
-
   types:
     isRolesSubset: (roles) ->
       allRoles = ['admin', 'dean', 'user']
@@ -32,6 +30,9 @@ module.exports =
     lastName:
       type: 'string'
       required: true
+    title:
+      type: 'string'
+      defaultsTo: ""
     username:
       type: 'string'
       required: true
@@ -52,6 +53,16 @@ module.exports =
       type: 'array'
       isRolesSubset: true
       required: true
+    department:
+      type: 'string'
+      required: true
+      enum: ["ZPF", "ZPM", "ZPR", "ZOEM", "ZESA", "ZVNE", "ZTEL", "ZESOI",
+      "ZARI", "ZEA", "ZEMRIS", "ZRK"]
+
+
+    travelOrders:
+      collection: 'travelorder'
+      via: 'owner'
 
     verifyPassword: (password) ->
       bcrypt = require 'bcrypt'

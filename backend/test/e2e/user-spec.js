@@ -11,11 +11,13 @@ describe('User CRUD', function() {
       form: {
         username:         'ferko',
         password:         'ferko123',
+        title:            "prof. dr. sc.",
         confirmPassword:  'ferko123',
         firstName:        'Ferko',
         lastName:         'Ferkić',
         roles:            ['user', 'admin'],
-        email:            'ferko@fer.hr'
+        email:            'ferko@fer.hr',
+        department:       'ZPR'
       }
     }).then(function(response){
       var result = response[0].toJSON();
@@ -25,6 +27,9 @@ describe('User CRUD', function() {
       console.log.verbose("result.body", result.body);
 
       expect(result.statusCode).to.equal(200);
+      expect(body.id).to.exist;
+      expect(body.createdAt).to.exist;
+      expect(body.updatedAt).to.exist;
       expect(body.username).to.equal('ferko');
       expect(body.password).to.be.undefined;
       expect(body.confirmPassword).to.be.undefined;
@@ -33,6 +38,10 @@ describe('User CRUD', function() {
       expect(body.roles).include('user');
       expect(body.roles).include('admin');
       expect(body.email).to.equal('ferko@fer.hr');
+      expect(body.department).to.equal('ZPR');
+
+      share.user = body;
+      share.user.password = "ferko123"
 
       done();
     }).catch(function(e){
