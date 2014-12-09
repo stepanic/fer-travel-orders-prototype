@@ -2,6 +2,7 @@
  #
  # @description :: TODO: You might write a short summary of how this model works and what it represents here.
  # @docs        :: http://sailsjs.org/#!documentation/models
+validationValues = require "../services/validationValues"
 
 unless typeof String::endsWith is "function"
   String::endsWith = (str) ->
@@ -11,7 +12,7 @@ module.exports =
 
   types:
     isRolesSubset: (roles) ->
-      allRoles = ['admin', 'dean', 'user']
+      allRoles = validationValues.userRoles
       sails.log.verbose roles
       sails.log.verbose allRoles
       for r1 in roles
@@ -56,8 +57,7 @@ module.exports =
     department:
       type: 'string'
       required: true
-      enum: ["ZPF", "ZPM", "ZPR", "ZOEM", "ZESA", "ZVNE", "ZTEL", "ZESOI",
-      "ZARI", "ZEA", "ZEMRIS", "ZRK"]
+      enum: validationValues.departments
 
 
     travelOrders:

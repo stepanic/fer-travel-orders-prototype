@@ -15,6 +15,8 @@ grunt.config.set('mochaTest', {
                                 // user object in association, look at global.share variable
                                 // USE: travel-order
       'test/e2e/budget-source-spec.js', // USE: travel-order
+      'test/e2e/currency-spec.js', // USE: travel-order, country
+      'test/e2e/country-spec.js', // USE: travel-order
       'test/e2e/travel-order-spec.js'
     ],
   }

@@ -15,7 +15,7 @@ describe('User CRUD', function() {
         confirmPassword:  'ferko123',
         firstName:        'Ferko',
         lastName:         'Ferkić',
-        roles:            ['user', 'admin'],
+        roles:            ['USER', 'ADMIN'],
         email:            'ferko@fer.hr',
         department:       'ZPR'
       }
@@ -35,8 +35,8 @@ describe('User CRUD', function() {
       expect(body.confirmPassword).to.be.undefined;
       expect(body.firstName).to.equal('Ferko');
       expect(body.lastName).to.equal('Ferkić');
-      expect(body.roles).include('user');
-      expect(body.roles).include('admin');
+      expect(body.roles).include('USER');
+      expect(body.roles).include('ADMIN');
       expect(body.email).to.equal('ferko@fer.hr');
       expect(body.department).to.equal('ZPR');
 

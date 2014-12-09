@@ -31,18 +31,45 @@ module.exports.policies = {
   UserController: {
     'find': ['authenticated'],
     'update': ['authenticated', 'disableEditOtherUsers', 'isCorrectBlueprintRequest'],
-    'create': policyBuilder.policyOR(['hasMasterToken', 'isAdmin']),
+    'create': ['isCorrectBlueprintRequest', policyBuilder.policyOR(['hasMasterToken', 'isAdmin'])],
     'destroy': ['authenticated', 'isAdmin']
   },
 
   TravelOrderController: {
-    'create': ['authenticated', 'disableOwnerAttribute', 'isCorrectBudgetSourceCode']
+    'create': ['authenticated', 'disableOwnerAttribute', 'isCorrectBlueprintRequest', 'isCorrectBudgetSourceCode']
   },
 
-  //policyBuilder.disableParams(['owner'])
-
   BudgetSourceController: {
-    'create': policyBuilder.policyOR(['hasMasterToken', 'isAdmin'])
+    'find': ['authenticated'],
+    'update': [policyBuilder.policyOR(['hasMasterToken', 'isAdmin']), 'isCorrectBlueprintRequest'],
+    'create': [policyBuilder.policyOR(['hasMasterToken', 'isAdmin']), 'isCorrectBlueprintRequest'],
+    'destroy': [policyBuilder.policyOR(['hasMasterToken', 'isAdmin'])]
+  },
+
+  CurrencyController: {
+    'find': ['authenticated'],
+    'update': [
+      policyBuilder.policyOR(['hasMasterToken', 'isAdmin']),
+      'isCorrectBlueprintRequest'
+    ],
+    'create': [
+      policyBuilder.policyOR(['hasMasterToken', 'isAdmin']),
+      'isCorrectBlueprintRequest'
+    ],
+    'destroy': [policyBuilder.policyOR(['hasMasterToken', 'isAdmin'])]
+  },
+
+  CountryController: {
+    'find': ['authenticated'],
+    'update': [
+      policyBuilder.policyOR(['hasMasterToken', 'isAdmin']),
+      'isCorrectBlueprintRequest'
+    ],
+    'create': [
+      policyBuilder.policyOR(['hasMasterToken', 'isAdmin']),
+      'isCorrectBlueprintRequest'
+    ],
+    'destroy': [policyBuilder.policyOR(['hasMasterToken', 'isAdmin'])]
   }
 
   /***************************************************************************

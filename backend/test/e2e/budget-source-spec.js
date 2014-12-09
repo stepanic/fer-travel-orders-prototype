@@ -1,6 +1,9 @@
 require('./sails-test-e2e-pre-config.js');
 
 describe('BudgetSource CRUD', function() {
+
+  share.budgetsources = []
+
   it('create-budget-source', function(done) {
     request({
       url: "http://localhost:1337/api/budgetsource",
@@ -26,7 +29,7 @@ describe('BudgetSource CRUD', function() {
       expect(body.name).to.equal('FER');
       expect(body.code).to.equal("007");
 
-      share.budgetsource = body;
+      share.budgetsources[0] = body;
 
       done();
     }).catch(function(e){
