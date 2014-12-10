@@ -102,4 +102,34 @@ describe('Currency CRUD', function() {
       done(e);
     });
   });
+
+  it('add-new value for USD currency, error because of duplicate name attribute', function (done) {
+    request({
+      url: "http://localhost:1337/api/currency",
+      method: 'POST',
+      headers: {
+        token: 'mastersecret'
+      },
+      form: {
+        name: 'USD',
+        exchangeRateToHRK: 6.07
+      }
+    }).then(function(response){
+
+      var result = response[0].toJSON();
+      var body = parseJSON(result.body);
+      console.log.verbose("body", body);
+      console.log.verbose("result", result);
+      console.log.verbose("result.body", result.body);
+
+      expect(result.statusCode).to.equal(400);
+
+      done();
+
+    }).catch(function(e){
+      console.log.verbose("Error", e);
+      done(e);
+    });
+  });
+
 });

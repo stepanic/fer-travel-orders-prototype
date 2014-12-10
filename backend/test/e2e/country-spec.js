@@ -108,4 +108,39 @@ describe('Country CRUD', function() {
       done(e);
     });
   });
+
+  it('get currency instance from country', function(done) {
+    request({
+      url: "http://localhost:1337/api/currency",
+      method: 'GET',
+      headers: {
+        username: share.users[0].username,
+        password: share.users[0].password
+      },
+      qs: {
+        name: share.countries[2].dailyAllowanceCurrency
+      }
+    }).then(function(response){
+
+      var result = response[0].toJSON();
+      var body = parseJSON(result.body);
+      console.log.verbose("body", body);
+      console.log.verbose("result", result);
+      console.log.verbose("result.body", result.body);
+
+      body = body[0];
+
+      expect(result.statusCode).to.equal(200);
+      expect(body.id).to.exist;
+      expect(body.createdAt).to.exist;
+      expect(body.updatedAt).to.exist;
+      expect(body.name).to.equal('USD');
+      expect(body.exchangeRateToHRK).to.exist;
+
+      done();
+    }).catch(function(e){
+      console.log.verbose("Error", e);
+      done(e);
+    });
+  });
 });

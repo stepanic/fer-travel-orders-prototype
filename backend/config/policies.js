@@ -40,8 +40,12 @@ module.exports.policies = {
       'authenticated',
       'disableOwnerAttribute',
       'isCorrectBlueprintRequest',
-      'isCorrectBudgetSourceCode'//,
-      // 'isCorrectCountryCode'
+      'isCorrectBudgetSourceCode',
+      'isCorrectCountryCode'
+    ],
+    'allow': [
+      'authenticated',
+      'requireTravelOrderIdAttribute'
     ]
   },
 
@@ -54,6 +58,7 @@ module.exports.policies = {
 
   CurrencyController: {
     'find': ['authenticated'],
+    'findOne': ['authenticated'],
     'update': [
       policyBuilder.policyOR(['hasMasterToken', 'isAdmin']),
       'isCorrectBlueprintRequest'

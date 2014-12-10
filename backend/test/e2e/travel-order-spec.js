@@ -5,16 +5,17 @@ describe('TravelOrder CRUD', function() {
   share.travelorders = []
 
 
-  it('create-travel-order with budgetsourcecode param', function(done) {
+  it('create-travel-order with budgetsourcecode, countrycode param', function(done) {
     request({
       url: "http://localhost:1337/api/travelorder",
       method: 'POST',
       headers: {
-        username: share.user.username,
-        password: share.user.password
+        username: share.users[0].username,
+        password: share.users[0].password
       },
       form: {
         budgetsourcecode: share.budgetsources[0].code,
+        countrycode: share.countries[0].code,
         datetimeStart: moment.tz("2014-11-29 13:45:21", "Europe/Zagreb").toISOString(),
         datetimeFinish: moment.tz("2014-12-7 21:00", "Europe/Zagreb").toISOString()
       }
@@ -45,16 +46,17 @@ describe('TravelOrder CRUD', function() {
     });
   });
 
-  it('create-travel-order with budgetsourcecode param 2', function(done) {
+  it('create-travel-order with budgetsourcecode, countrycode param 2', function(done) {
     request({
       url: "http://localhost:1337/api/travelorder",
       method: 'POST',
       headers: {
-        username: share.user.username,
-        password: share.user.password
+        username: share.users[0].username,
+        password: share.users[0].password
       },
       form: {
         budgetsourcecode: share.budgetsources[0].code,
+        countrycode: share.countries[1].code,
         datetimeStart: moment.tz("2014-11-29 14:45:21", "Europe/Zagreb").toISOString(),
         datetimeFinish: moment.tz("2014-12-7 21:00", "Europe/Zagreb").toISOString()
       }
@@ -101,16 +103,17 @@ describe('TravelOrder CRUD', function() {
     });
   });
 
-  it('create-travel-order, with budget param', function(done) {
+  it('create-travel-order, with budget, countrycode params', function(done) {
     request({
       url: "http://localhost:1337/api/travelorder",
       method: 'POST',
       headers: {
-        username: share.user.username,
-        password: share.user.password
+        username: share.users[0].username,
+        password: share.users[0].password
       },
       form: {
         budget: share.budgetsources[0].id,
+        countrycode: share.countries[2].code,
         datetimeStart: moment.tz("2013-5-6 10:41:51", "Europe/Zagreb").toISOString(),
         datetimeFinish: moment.tz("2013-5-17 9:00", "Europe/Zagreb").toISOString()
       }
@@ -156,16 +159,17 @@ describe('TravelOrder CRUD', function() {
     });
   });
 
-  it('create-travel-order, with budget param, datetimeStart and datetimeFinish with dailyAllowance 0', function(done) {
+  it('create-travel-order, with budget, country params, datetimeStart and datetimeFinish with dailyAllowance 0', function(done) {
     request({
       url: "http://localhost:1337/api/travelorder",
       method: 'POST',
       headers: {
-        username: share.user.username,
-        password: share.user.password
+        username: share.users[0].username,
+        password: share.users[0].password
       },
       form: {
         budget: share.budgetsources[0].id,
+        country: share.countries[2].id,
         datetimeStart: moment.tz("2013-5-6 2:41:51", "Europe/Zagreb").toISOString(),
         datetimeFinish: moment.tz("2013-5-17 4:34", "Europe/Zagreb").toISOString()
       }
@@ -216,8 +220,8 @@ describe('TravelOrder CRUD', function() {
       url: "http://localhost:1337/api/travelorder",
       method: 'POST',
       headers: {
-        username: share.user.username,
-        password: share.user.password
+        username: share.users[0].username,
+        password: share.users[0].password
       },
       form: {
         budget: share.budgetsources[0].id,
@@ -229,6 +233,85 @@ describe('TravelOrder CRUD', function() {
       console.log.verbose("result.body", result.body);
 
       expect(result.statusCode).to.equal(403);
+
+      done();
+    }).catch(function(e){
+      console.log.verbose("Error", e);
+      done(e);
+    });
+  });
+
+  it('Error, policy failed, travelorderid is required, try to allow travel order [0] by user [1]', function(done) {
+    request({
+      url: "http://localhost:1337/api/travelorder/allow",
+      method: 'PUT',
+      headers: {
+        username: share.users[1].username,
+        password: share.users[1].password
+      },
+      form: {
+        // travelorderid: share.travelorders[0].id
+      }
+    }).then(function(response){
+      var result = response[0].toJSON();
+      var body = parseJSON(result.body);
+      console.log.verbose("result.body", result.body);
+
+      console.log(body);
+      expect(result.statusCode).to.equal(403);
+
+      done();
+    }).catch(function(e){
+      console.log.verbose("Error", e);
+      done(e);
+    });
+  });
+
+  it('allow travel order [0] by user [1]', function(done) {
+    request({
+      url: "http://localhost:1337/api/travelorder/allow",
+      method: 'PUT',
+      headers: {
+        username: share.users[1].username,
+        password: share.users[1].password
+      },
+      form: {
+        travelorderid: share.travelorders[0].id
+      }
+    }).then(function(response){
+      var result = response[0].toJSON();
+      var body = parseJSON(result.body);
+      console.log.verbose("result.body", result.body);
+
+
+      expect(result.statusCode).to.equal(200);
+      expect(body.summary).to.exist;
+
+      done();
+    }).catch(function(e){
+      console.log.verbose("Error", e);
+      done(e);
+    });
+  });
+
+  it('Error: Try twice to allow travel order [0] by user [1]', function(done) {
+    request({
+      url: "http://localhost:1337/api/travelorder/allow",
+      method: 'PUT',
+      headers: {
+        username: share.users[1].username,
+        password: share.users[1].password
+      },
+      form: {
+        travelorderid: share.travelorders[0].id
+      }
+    }).then(function(response){
+      var result = response[0].toJSON();
+      var body = parseJSON(result.body);
+      console.log.verbose("result.body", result.body);
+
+      expect(result.statusCode).to.equal(403);
+      expect(body.summary).to.exist;
 
       done();
     }).catch(function(e){

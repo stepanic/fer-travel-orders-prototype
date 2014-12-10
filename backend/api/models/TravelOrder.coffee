@@ -45,12 +45,17 @@ module.exports =
 
       return allowances
 
-    # country:
-
+    country:
+      model: 'country'
     owner:
       model: 'user'
     budget:
       model: 'budgetsource'
+
+    allowedBy:
+      collection: 'user'
+      via: 'allowedTravelOrders'
+      dominant: true
 
     toJSON: () ->
       obj = @toObject()
@@ -61,4 +66,6 @@ module.exports =
     values.owner = current.user.id
     if values.budgetsourcecode
       values.budget = current.budgetsource.id
+    if values.countrycode
+      values.country = current.country.id
     cb()

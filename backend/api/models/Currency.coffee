@@ -10,9 +10,12 @@ module.exports =
     name:
       type: 'string'
       required: true
+      unique: true # TODO: put unique:false and enable to calculate exchangeRateToHRK by date
       enum: validationValues.currencies
     exchangeRateToHRK:
       type: 'float'
       required: true
+
+
 
 

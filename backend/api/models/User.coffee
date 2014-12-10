@@ -54,15 +54,20 @@ module.exports =
       type: 'array'
       isRolesSubset: true
       required: true
+      defaultsTo: ['USER']
     department:
       type: 'string'
       required: true
       enum: validationValues.departments
 
 
-    travelOrders:
+    ownedTravelOrders:
       collection: 'travelorder'
       via: 'owner'
+
+    allowedTravelOrders:
+      collection: 'travelorder'
+      via: 'allowedBy'
 
     verifyPassword: (password) ->
       bcrypt = require 'bcrypt'
