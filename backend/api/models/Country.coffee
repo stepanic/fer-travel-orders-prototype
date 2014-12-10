@@ -7,11 +7,22 @@ validationValues = require "../services/validationValues"
 
 module.exports =
 
+  types:
+    uppercase: (string) ->
+      return string is string.toUpperCase()
+
   attributes:
-    name:
+    code: # ISO code of country
       type: "string"
       required: true
       unique: true
+      uppercase: true
+      alpha: true
+      minLength: 2
+      maxLength: 2
+    name:
+      type: "string"
+      required: true
     dailyAllowanceCurrency:
       type: "string"
       required: true

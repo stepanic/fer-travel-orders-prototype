@@ -13,6 +13,7 @@ describe('Country CRUD', function() {
         token: 'mastersecret'
       },
       form: {
+        code: 'HR',
         name: 'Hrvatska',
         dailyAllowanceCurrency: 'HRK'
       }
@@ -28,6 +29,7 @@ describe('Country CRUD', function() {
       expect(body.id).to.exist;
       expect(body.createdAt).to.exist;
       expect(body.updatedAt).to.exist;
+      expect(body.code).to.equal('HR');
       expect(body.name).to.equal('Hrvatska');
       expect(body.dailyAllowanceCurrency).to.equal('HRK');
 
@@ -43,6 +45,7 @@ describe('Country CRUD', function() {
           token: 'mastersecret'
         },
         form: {
+          code: 'DE',
           name: 'Njemačka',
           dailyAllowanceCurrency: 'EUR'
         }
@@ -59,6 +62,7 @@ describe('Country CRUD', function() {
       expect(body.id).to.exist;
       expect(body.createdAt).to.exist;
       expect(body.updatedAt).to.exist;
+      expect(body.code).to.equal('DE');
       expect(body.name).to.equal('Njemačka');
       expect(body.dailyAllowanceCurrency).to.equal('EUR');
 
@@ -74,6 +78,7 @@ describe('Country CRUD', function() {
           token: 'mastersecret'
         },
         form: {
+          code: 'US',
           name: 'SAD',
           dailyAllowanceCurrency: 'USD'
         }
@@ -90,6 +95,7 @@ describe('Country CRUD', function() {
       expect(body.id).to.exist;
       expect(body.createdAt).to.exist;
       expect(body.updatedAt).to.exist;
+      expect(body.code).to.equal('US');
       expect(body.name).to.equal('SAD');
       expect(body.dailyAllowanceCurrency).to.equal('USD');
 

@@ -4,6 +4,7 @@ describe('TravelOrder CRUD', function() {
 
   share.travelorders = []
 
+
   it('create-travel-order with budgetsourcecode param', function(done) {
     request({
       url: "http://localhost:1337/api/travelorder",
@@ -13,21 +14,85 @@ describe('TravelOrder CRUD', function() {
         password: share.user.password
       },
       form: {
-        budgetsourcecode: share.budgetsources[0].code
+        budgetsourcecode: share.budgetsources[0].code,
+        datetimeStart: moment.tz("2014-11-29 13:45:21", "Europe/Zagreb").toISOString(),
+        datetimeFinish: moment.tz("2014-12-7 21:00", "Europe/Zagreb").toISOString()
       }
     }).then(function(response){
+
       var result = response[0].toJSON();
       var body = parseJSON(result.body);
       console.log.verbose("body", body);
       console.log.verbose("result", result);
       console.log.verbose("result.body", result.body);
 
+      console.log.verbose("body.datetimeStart UTC", body.datetimeStart);
+      console.log.verbose("body.datetimeStart Europe/Zagreb", moment(body.datetimeStart).tz("Europe/Zagreb").format("YYYY-MM-DD HH:mm:ss"));
+
       expect(result.statusCode).to.equal(200);
       expect(body.id).to.exist;
+      expect(body.datetimeStart).to.equal(moment.tz("2014-11-29 13:45:21", "Europe/Zagreb").toISOString());
+      expect(body.datetimeFinish).to.equal(moment.tz("2014-12-7 21:00", "Europe/Zagreb").toISOString());
       expect(body.createdAt).to.exist;
       expect(body.updatedAt).to.exist;
 
       share.travelorders[0] = body;
+
+      done();
+    }).catch(function(e){
+      console.log.verbose("Error", e);
+      done(e);
+    });
+  });
+
+  it('create-travel-order with budgetsourcecode param 2', function(done) {
+    request({
+      url: "http://localhost:1337/api/travelorder",
+      method: 'POST',
+      headers: {
+        username: share.user.username,
+        password: share.user.password
+      },
+      form: {
+        budgetsourcecode: share.budgetsources[0].code,
+        datetimeStart: moment.tz("2014-11-29 14:45:21", "Europe/Zagreb").toISOString(),
+        datetimeFinish: moment.tz("2014-12-7 21:00", "Europe/Zagreb").toISOString()
+      }
+    }).then(function(response){
+
+      var result = response[0].toJSON();
+      var body = parseJSON(result.body);
+      console.log.verbose("body", body);
+      console.log.verbose("result", result);
+      console.log.verbose("result.body", result.body);
+
+      console.log.verbose("body.datetimeStart UTC", body.datetimeStart);
+      console.log.verbose("body.datetimeStart Europe/Zagreb", moment(body.datetimeStart).tz("Europe/Zagreb").format("YYYY-MM-DD HH:mm:ss"));
+
+      expect(result.statusCode).to.equal(200);
+      expect(body.id).to.exist;
+      expect(body.datetimeStart).to.equal(moment.tz("2014-11-29 14:45:21", "Europe/Zagreb").toISOString());
+      expect(body.datetimeFinish).to.equal(moment.tz("2014-12-7 21:00", "Europe/Zagreb").toISOString());
+
+      var date = moment.tz("2014-11-29 14:45:21", "Europe/Zagreb");
+      for(var i = 0; i < body.dailyAllowances.length; i++) {
+        if (i === 0) {
+          expect(body.dailyAllowances[i].size).to.equal(1);
+        } else if (i === (body.dailyAllowances.length - 1)) {
+          date = moment.tz("2014-12-7 21:00", "Europe/Zagreb");
+          expect(body.dailyAllowances[i].size).to.equal(1);
+        } else {
+          expect(body.dailyAllowances[i].size).to.equal(1);
+        }
+
+        expect(body.dailyAllowances[i].datetime).to.equal(date.toISOString());
+        date.add(1, "days");
+      }
+
+      expect(body.createdAt).to.exist;
+      expect(body.updatedAt).to.exist;
+
+      share.travelorders[2] = body;
 
       done();
     }).catch(function(e){
@@ -45,7 +110,9 @@ describe('TravelOrder CRUD', function() {
         password: share.user.password
       },
       form: {
-        budget: share.budgetsources[0].id
+        budget: share.budgetsources[0].id,
+        datetimeStart: moment.tz("2013-5-6 10:41:51", "Europe/Zagreb").toISOString(),
+        datetimeFinish: moment.tz("2013-5-17 9:00", "Europe/Zagreb").toISOString()
       }
     }).then(function(response){
       var result = response[0].toJSON();
@@ -54,12 +121,88 @@ describe('TravelOrder CRUD', function() {
       console.log.verbose("result", result);
       console.log.verbose("result.body", result.body);
 
+      console.log.verbose("body.datetimeStart UTC", body.datetimeStart);
+      console.log.verbose("body.datetimeStart Europe/Zagreb", moment(body.datetimeStart).tz("Europe/Zagreb").format("YYYY-MM-DD HH:mm:ss"));
+
       expect(result.statusCode).to.equal(200);
       expect(body.id).to.exist;
+      expect(body.datetimeStart).to.equal(moment.tz("2013-5-6 10:41:51", "Europe/Zagreb").toISOString());
+      expect(body.datetimeFinish).to.equal(moment.tz("2013-5-17 9:00", "Europe/Zagreb").toISOString());
+
+      var date = moment.tz("2013-5-6 10:41:51", "Europe/Zagreb");
+      for(var i = 0; i < body.dailyAllowances.length; i++) {
+        if (i === 0) {
+          expect(body.dailyAllowances[i].size).to.equal(0.5);
+        } else if (i === (body.dailyAllowances.length - 1)) {
+          date = moment.tz("2013-5-17 9:00", "Europe/Zagreb");
+          expect(body.dailyAllowances[i].size).to.equal(0.5);
+        } else {
+          expect(body.dailyAllowances[i].size).to.equal(1);
+        }
+
+        expect(body.dailyAllowances[i].datetime).to.equal(date.toISOString());
+        date.add(1, "days");
+      }
+
       expect(body.createdAt).to.exist;
       expect(body.updatedAt).to.exist;
 
-      share.travelorders[1] = body;
+      share.travelorders[2] = body;
+
+      done();
+    }).catch(function(e){
+      console.log.verbose("Error", e);
+      done(e);
+    });
+  });
+
+  it('create-travel-order, with budget param, datetimeStart and datetimeFinish with dailyAllowance 0', function(done) {
+    request({
+      url: "http://localhost:1337/api/travelorder",
+      method: 'POST',
+      headers: {
+        username: share.user.username,
+        password: share.user.password
+      },
+      form: {
+        budget: share.budgetsources[0].id,
+        datetimeStart: moment.tz("2013-5-6 2:41:51", "Europe/Zagreb").toISOString(),
+        datetimeFinish: moment.tz("2013-5-17 4:34", "Europe/Zagreb").toISOString()
+      }
+    }).then(function(response){
+      var result = response[0].toJSON();
+      var body = parseJSON(result.body);
+      console.log.verbose("body", body);
+      console.log.verbose("result", result);
+      console.log.verbose("result.body", result.body);
+
+      console.log.verbose("body.datetimeStart UTC", body.datetimeStart);
+      console.log.verbose("body.datetimeStart Europe/Zagreb", moment(body.datetimeStart).tz("Europe/Zagreb").format("YYYY-MM-DD HH:mm:ss"));
+
+      expect(result.statusCode).to.equal(200);
+      expect(body.id).to.exist;
+      expect(body.datetimeStart).to.equal(moment.tz("2013-5-6 2:41:51", "Europe/Zagreb").toISOString());
+      expect(body.datetimeFinish).to.equal(moment.tz("2013-5-17 4:34", "Europe/Zagreb").toISOString());
+
+      var date = moment.tz("2013-5-6 2:41:51", "Europe/Zagreb");
+      for(var i = 0; i < body.dailyAllowances.length; i++) {
+        if (i === 0) {
+          expect(body.dailyAllowances[i].size).to.equal(0);
+        } else if (i === (body.dailyAllowances.length - 1)) {
+          date = moment.tz("2013-5-17 4:34", "Europe/Zagreb");
+          expect(body.dailyAllowances[i].size).to.equal(0);
+        } else {
+          expect(body.dailyAllowances[i].size).to.equal(1);
+        }
+
+        expect(body.dailyAllowances[i].datetime).to.equal(date.toISOString());
+        date.add(1, "days");
+      }
+
+      expect(body.createdAt).to.exist;
+      expect(body.updatedAt).to.exist;
+
+      share.travelorders[3] = body;
 
       done();
     }).catch(function(e){
@@ -78,7 +221,7 @@ describe('TravelOrder CRUD', function() {
       },
       form: {
         budget: share.budgetsources[0].id,
-        id: 7043
+        id: 7043 // error 403 because id is automatic attribute is forbidden by outside setup
       }
     }).then(function(response){
       var result = response[0].toJSON();

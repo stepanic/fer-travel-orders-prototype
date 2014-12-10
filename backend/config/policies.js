@@ -36,7 +36,13 @@ module.exports.policies = {
   },
 
   TravelOrderController: {
-    'create': ['authenticated', 'disableOwnerAttribute', 'isCorrectBlueprintRequest', 'isCorrectBudgetSourceCode']
+    'create': [
+      'authenticated',
+      'disableOwnerAttribute',
+      'isCorrectBlueprintRequest',
+      'isCorrectBudgetSourceCode'//,
+      // 'isCorrectCountryCode'
+    ]
   },
 
   BudgetSourceController: {

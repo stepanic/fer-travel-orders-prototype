@@ -5,6 +5,8 @@ var expect = chai.expect;
 var Promise = require("bluebird");
 var request = Promise.promisify(require("request"));
 
+var moment = require('moment-timezone');
+
 var Sails = require('sails');
 var sails;
 
@@ -17,6 +19,7 @@ global.request = request
 global.parseJSON = Helper.parseJSON
 global.expect = expect
 global.share = share
+global.moment = moment
 
 // Global before hook
 before(function (done) {
