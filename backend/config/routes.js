@@ -48,6 +48,7 @@ module.exports.routes = {
   ***************************************************************************/
 
 
-  'put /api/travelorder/allow': 'TravelOrderController.allow'
+  'put /api/travelorder/allow': 'TravelOrderController.allow',
+  'get /api/travelorder/myall': 'TravelOrderController.myall'
 
 };

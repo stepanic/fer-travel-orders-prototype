@@ -17,3 +17,11 @@ module.exports =
           res.json 200,
             summary: "Travel order is allowed!"
 
+  myall: (req, res) ->
+    TravelOrder.find({ owner: current.user.id }).exec (err, travelorders) ->
+      if err
+        res.json 403,
+          summary: "Error: You are not allowed to read all your Travel orders!"
+      else
+        res.json 200,
+          travelorders

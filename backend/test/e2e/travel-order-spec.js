@@ -548,4 +548,92 @@ describe('TravelOrder CRUD', function() {
       done(e);
     });
   });
+
+  it('Allow user [2] username: user to Update travel order [0], which are owner', function(done) {
+    // Add on end of array one new element
+    share.travelorders[0].items.push ({
+      name: "Nabavka promotivnih materijala",
+      price: 1235.65,
+      currency: 'HRK'
+    });
+
+    request({
+      url: "http://localhost:1337/api/travelorder/" + share.travelorders[0].id,
+      method: 'PUT',
+      headers: {
+        username: share.users[2].username,
+        password: share.users[2].password
+      },
+      form: {
+        items: share.travelorders[0].items
+      }
+    }).then(function(response){
+      var result = response[0].toJSON();
+      var body = parseJSON(result.body);
+
+      expect(result.statusCode).to.equal(200);
+      expect(body.items[4].price).to.equal('1235.65');
+      expect(body.items[4].currency).to.equal('HRK');
+
+      done();
+    }).catch(function(e){
+      console.log.verbose("Error", e);
+      done(e);
+    });
+  });
+
+  it('NOT Allow user [3] username: user to Update travel order [0], which are NOT owner', function(done) {
+    // Add on end of array one new element
+    share.travelorders[0].items.push ({
+      name: "Nabavka promotivnih materijala",
+      price: 1235.65,
+      currency: 'HRK'
+    });
+
+    request({
+      url: "http://localhost:1337/api/travelorder/" + share.travelorders[0].id,
+      method: 'PUT',
+      headers: {
+        username: share.users[3].username,
+        password: share.users[3].password
+      },
+      form: {
+        items: share.travelorders[0].items
+      }
+    }).then(function(response){
+      var result = response[0].toJSON();
+      var body = parseJSON(result.body);
+
+      expect(result.statusCode).to.equal(400);
+
+      done();
+    }).catch(function(e){
+      console.log.verbose("Error", e);
+      done(e);
+    });
+  });
+
+  it('Should read all travelorders by user [2]', function(done) {
+    request({
+      url: "http://localhost:1337/api/travelorder/myall",
+      method: 'GET',
+      headers: {
+        username: share.users[2].username,
+        password: share.users[2].password
+      }
+    }).then(function(response){
+      var result = response[0].toJSON();
+      var body = parseJSON(result.body);
+
+      expect(result.statusCode).to.equal(200);
+      for (var i = 0; i < body.length; i++) {
+        expect(share.users[2].id).to.equal(body[i].owner);
+      }
+
+      done();
+    }).catch(function(e){
+      console.log.verbose("Error", e);
+      done(e);
+    });
+  });
 });
