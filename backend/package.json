@@ -26,7 +26,8 @@
     "bcrypt": "^0.8.0",
     "async": "^0.9.0",
     "moment": "^2.8.4",
-    "moment-timezone": "^0.2.5"
+    "moment-timezone": "^0.2.5",
+    "validator": "^3.22.2"
   },
   "scripts": {
     "start": "node app.js",

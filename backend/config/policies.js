@@ -45,11 +45,23 @@ module.exports.policies = {
     ],
     'allow': [
       'authenticated',
-      'requireTravelOrderIdAttribute'
+      'requireTravelOrderIdAttribute',
+      policyBuilder.policyOR(['isDean', 'isDepartmentHead'])
+    ],
+    'findOne': [
+      'authenticated',
+      policyBuilder.policyOR(['hasMasterToken', 'isAdmin', 'isTravelOrderOwner', 'isDepartmentHead'])
     ]
   },
 
   BudgetSourceController: {
+    'find': ['authenticated'],
+    'update': [policyBuilder.policyOR(['hasMasterToken', 'isAdmin']), 'isCorrectBlueprintRequest'],
+    'create': [policyBuilder.policyOR(['hasMasterToken', 'isAdmin']), 'isCorrectBlueprintRequest'],
+    'destroy': [policyBuilder.policyOR(['hasMasterToken', 'isAdmin'])]
+  },
+
+  TravelOrderItemController: {
     'find': ['authenticated'],
     'update': [policyBuilder.policyOR(['hasMasterToken', 'isAdmin']), 'isCorrectBlueprintRequest'],
     'create': [policyBuilder.policyOR(['hasMasterToken', 'isAdmin']), 'isCorrectBlueprintRequest'],

@@ -4,7 +4,7 @@ describe('User CRUD', function() {
 
   share.users = []
 
-  it('create-user ADMIN', function(done) {
+  it('create-user ADMIN user [0]', function(done) {
     request({
       url: "http://localhost:1337/api/user",
       method: 'POST',
@@ -53,7 +53,7 @@ describe('User CRUD', function() {
     });
   });
 
-  it('create-user DEAN', function(done) {
+  it('create-user DEAN user [1]', function(done) {
     request({
       url: "http://localhost:1337/api/user",
       method: 'POST',
@@ -102,7 +102,7 @@ describe('User CRUD', function() {
     });
   });
 
-  it('create-user USER, regular user', function(done) {
+  it('create-user USER, regular user [2]', function(done) {
     request({
       url: "http://localhost:1337/api/user",
       method: 'POST',
@@ -116,7 +116,7 @@ describe('User CRUD', function() {
         confirmPassword:  'user123',
         firstName:        'User',
         lastName:         'Djelatnik FER-a',
-        // roles:            ['USER'],
+        // roles:            ['USER'],  // defaultsTo: ['USER']
         email:            'user@fer.hr',
         department:       'ZPM'
       }
@@ -142,6 +142,104 @@ describe('User CRUD', function() {
 
       share.users[2] = body;
       share.users[2].password = "user123"
+
+      done();
+    }).catch(function(e){
+      console.log.verbose("Error", e);
+      done(e);
+    });
+  });
+
+  it('create-user HEAD, ZPR HEAD user [3]', function(done) {
+    request({
+      url: "http://localhost:1337/api/user",
+      method: 'POST',
+      headers: {
+        token: 'mastersecret'
+      },
+      form: {
+        username:         'headzpr',
+        password:         'headzpr123',
+        title:            "dr. sc.",
+        confirmPassword:  'headzpr123',
+        firstName:        'HeadZPR',
+        lastName:         'Predstojnik ZPR FER-a',
+        roles:            ['HEAD', 'USER'],
+        email:            'headzpr@fer.hr',
+        department:       'ZPR'
+      }
+    }).then(function(response){
+      var result = response[0].toJSON();
+      var body = parseJSON(result.body);
+      console.log.verbose("body", body);
+      console.log.verbose("result", result);
+      console.log.verbose("result.body", result.body);
+
+      expect(result.statusCode).to.equal(200);
+      expect(body.id).to.exist;
+      expect(body.createdAt).to.exist;
+      expect(body.updatedAt).to.exist;
+      expect(body.username).to.equal('headzpr');
+      expect(body.password).to.be.undefined;
+      expect(body.confirmPassword).to.be.undefined;
+      expect(body.firstName).to.equal('HeadZPR');
+      expect(body.lastName).to.equal('Predstojnik ZPR FER-a');
+      expect(body.roles).include('USER');
+      expect(body.roles).include('HEAD');
+      expect(body.email).to.equal('headzpr@fer.hr');
+      expect(body.department).to.equal('ZPR');
+
+      share.users[3] = body;
+      share.users[3].password = "headzpr123"
+
+      done();
+    }).catch(function(e){
+      console.log.verbose("Error", e);
+      done(e);
+    });
+  });
+
+  it('create-user HEAD, ZPM HEAD user [4]', function(done) {
+    request({
+      url: "http://localhost:1337/api/user",
+      method: 'POST',
+      headers: {
+        token: 'mastersecret'
+      },
+      form: {
+        username:         'headzpm',
+        password:         'headzpm123',
+        title:            "mag. math.",
+        confirmPassword:  'headzpm123',
+        firstName:        'HeadZPM',
+        lastName:         'Predstojnik ZPM FER-a',
+        roles:            ['HEAD', 'USER'],
+        email:            'headzpm@fer.hr',
+        department:       'ZPM'
+      }
+    }).then(function(response){
+      var result = response[0].toJSON();
+      var body = parseJSON(result.body);
+      console.log.verbose("body", body);
+      console.log.verbose("result", result);
+      console.log.verbose("result.body", result.body);
+
+      expect(result.statusCode).to.equal(200);
+      expect(body.id).to.exist;
+      expect(body.createdAt).to.exist;
+      expect(body.updatedAt).to.exist;
+      expect(body.username).to.equal('headzpm');
+      expect(body.password).to.be.undefined;
+      expect(body.confirmPassword).to.be.undefined;
+      expect(body.firstName).to.equal('HeadZPM');
+      expect(body.lastName).to.equal('Predstojnik ZPM FER-a');
+      expect(body.roles).include('USER');
+      expect(body.roles).include('HEAD');
+      expect(body.email).to.equal('headzpm@fer.hr');
+      expect(body.department).to.equal('ZPM');
+
+      share.users[4] = body;
+      share.users[4].password = "headzpm123"
 
       done();
     }).catch(function(e){

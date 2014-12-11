@@ -3,4 +3,4 @@ module.exports =
                 "NOK", "SEK", "PLN"]
   departments: ["ZPF", "ZPM", "ZPR", "ZOEM", "ZESA", "ZVNE", "ZTEL", "ZESOI",
                 "ZARI", "ZEA", "ZEMRIS", "ZRK"]
-  userRoles: ['ADMIN', 'DEAN', 'USER']
+  userRoles: ['ADMIN', 'DEAN', 'HEAD', 'USER']

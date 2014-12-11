@@ -1,8 +1,12 @@
  # TravelOrderItem.coffee
  #
- # @description :: TODO: You might write a short summary of how this model works and what it represents here.
+ # @description :: It's used only for auto suggesting, doesn't have any realtion with TravelOrder!
  # @docs        :: http://sailsjs.org/#!documentation/models
 
 module.exports =
 
-  attributes: {}
+  attributes:
+    name:
+      type: 'string'
+      required: true
+      unique: true
