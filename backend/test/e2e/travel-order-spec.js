@@ -499,4 +499,53 @@ describe('TravelOrder CRUD', function() {
       done(e);
     });
   });
+
+  it('Allow travel order [0] is by ZPM Department HEAD [4]', function(done) {
+    request({
+      url: "http://localhost:1337/api/travelorder/allow",
+      method: 'PUT',
+      headers: {
+        username: share.users[4].username,
+        password: share.users[4].password
+      },
+      form: {
+        travelorderid: share.travelorders[0].id
+      }
+    }).then(function(response){
+      var result = response[0].toJSON();
+      var body = parseJSON(result.body);
+      console.log.verbose("result.body", result.body);
+
+      expect(result.statusCode).to.equal(200);
+      expect(body.summary).to.exist;
+
+      done();
+    }).catch(function(e){
+      console.log.verbose("Error", e);
+      done(e);
+    });
+  });
+
+  it('Should be travel order [0] allowed by user [4] ZPM Department HEAD', function(done) {
+    request({
+      url: "http://localhost:1337/api/travelorder/" + share.travelorders[0].id,
+      method: 'GET',
+      headers: {
+        username: share.users[4].username,
+        password: share.users[4].password
+      }
+    }).then(function(response){
+      var result = response[0].toJSON();
+      var body = parseJSON(result.body);
+      console.log.verbose("result.body", result.body);
+
+      expect(result.statusCode).to.equal(200);
+      expect(body.isAllowedByDepartmentHead).to.equal(true);
+
+      done();
+    }).catch(function(e){
+      console.log.verbose("Error", e);
+      done(e);
+    });
+  });
 });
