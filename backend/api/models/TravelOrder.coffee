@@ -35,6 +35,14 @@ module.exports =
       defaultsTo: []
       correctTravelItemFormat: true
 
+    travelOrderPDFs:
+      type: 'array'
+      defaultsTo: []
+
+    travelOrderReportPDFs:
+      type: 'array'
+      defaultsTo: []
+
 
     calculateDailyAllowances: () ->
       a = moment.utc @datetimeStart

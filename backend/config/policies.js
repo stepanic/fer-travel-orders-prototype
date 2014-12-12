@@ -39,12 +39,14 @@ module.exports.policies = {
     'create': [
       'authenticated',
       'disableOwnerAttribute',
+      'disableProtectedTravelOrderAttributes',
       'isCorrectBlueprintRequest',
       'isCorrectBudgetSourceCode',
       'isCorrectCountryCode'
     ],
     'update': [
       'authenticated',
+      'disableProtectedTravelOrderAttributes',
       'isCorrectBlueprintRequest',
       policyBuilder.policyOR(['isAdmin', 'isTravelOrderOwner'])
     ],
@@ -64,7 +66,11 @@ module.exports.policies = {
     'myall': [
       'authenticated'
     ],
-    'destroy': ['authenticated', 'isAdmin']
+    'destroy': ['authenticated', 'isAdmin'],
+    'generatePDF': [
+      policyBuilder.policyOR(['hasMasterToken', 'authenticated']),
+      policyBuilder.policyOR(['hasMasterToken', 'isAdmin', 'isTravelOrderOwner', 'isDepartmentHead'])
+    ]
   },
 
   BudgetSourceController: {

@@ -27,7 +27,8 @@
     "async": "^0.9.0",
     "moment": "^2.8.4",
     "moment-timezone": "^0.2.5",
-    "validator": "^3.22.2"
+    "validator": "^3.22.2",
+    "pdfkit": "^0.7.0"
   },
   "scripts": {
     "start": "node app.js",

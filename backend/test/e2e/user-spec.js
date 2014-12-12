@@ -65,8 +65,8 @@ describe('User CRUD', function() {
         password:         'dean123',
         title:            "prof. dr. sc.",
         confirmPassword:  'dean123',
-        firstName:        'Dean',
-        lastName:         'Dean lastName',
+        firstName:        'Ivan',
+        lastName:         'Ivić',
         roles:            ['USER', 'DEAN'],
         email:            'dean@fer.hr',
         department:       'ZEMRIS'
@@ -85,8 +85,8 @@ describe('User CRUD', function() {
       expect(body.username).to.equal('dean');
       expect(body.password).to.be.undefined;
       expect(body.confirmPassword).to.be.undefined;
-      expect(body.firstName).to.equal('Dean');
-      expect(body.lastName).to.equal('Dean lastName');
+      expect(body.firstName).to.equal('Ivan');
+      expect(body.lastName).to.equal('Ivić');
       expect(body.roles).include('USER');
       expect(body.roles).include('DEAN');
       expect(body.email).to.equal('dean@fer.hr');
@@ -114,8 +114,8 @@ describe('User CRUD', function() {
         password:         'user123',
         title:            "doc. dr. sc.",
         confirmPassword:  'user123',
-        firstName:        'User',
-        lastName:         'Djelatnik FER-a',
+        firstName:        'Petar',
+        lastName:         'Petrović',
         // roles:            ['USER'],  // defaultsTo: ['USER']
         email:            'user@fer.hr',
         department:       'ZPM'
@@ -134,8 +134,8 @@ describe('User CRUD', function() {
       expect(body.username).to.equal('user');
       expect(body.password).to.be.undefined;
       expect(body.confirmPassword).to.be.undefined;
-      expect(body.firstName).to.equal('User');
-      expect(body.lastName).to.equal('Djelatnik FER-a');
+      expect(body.firstName).to.equal('Petar');
+      expect(body.lastName).to.equal('Petrović');
       expect(body.roles).include('USER');
       expect(body.email).to.equal('user@fer.hr');
       expect(body.department).to.equal('ZPM');
@@ -162,8 +162,8 @@ describe('User CRUD', function() {
         password:         'headzpr123',
         title:            "dr. sc.",
         confirmPassword:  'headzpr123',
-        firstName:        'HeadZPR',
-        lastName:         'Predstojnik ZPR FER-a',
+        firstName:        'Marko',
+        lastName:         'Marković',
         roles:            ['HEAD', 'USER'],
         email:            'headzpr@fer.hr',
         department:       'ZPR'
@@ -182,8 +182,8 @@ describe('User CRUD', function() {
       expect(body.username).to.equal('headzpr');
       expect(body.password).to.be.undefined;
       expect(body.confirmPassword).to.be.undefined;
-      expect(body.firstName).to.equal('HeadZPR');
-      expect(body.lastName).to.equal('Predstojnik ZPR FER-a');
+      expect(body.firstName).to.equal('Marko');
+      expect(body.lastName).to.equal('Marković');
       expect(body.roles).include('USER');
       expect(body.roles).include('HEAD');
       expect(body.email).to.equal('headzpr@fer.hr');
@@ -211,8 +211,8 @@ describe('User CRUD', function() {
         password:         'headzpm123',
         title:            "mag. math.",
         confirmPassword:  'headzpm123',
-        firstName:        'HeadZPM',
-        lastName:         'Predstojnik ZPM FER-a',
+        firstName:        'Josip',
+        lastName:         'Josipić',
         roles:            ['HEAD', 'USER'],
         email:            'headzpm@fer.hr',
         department:       'ZPM'
@@ -231,8 +231,8 @@ describe('User CRUD', function() {
       expect(body.username).to.equal('headzpm');
       expect(body.password).to.be.undefined;
       expect(body.confirmPassword).to.be.undefined;
-      expect(body.firstName).to.equal('HeadZPM');
-      expect(body.lastName).to.equal('Predstojnik ZPM FER-a');
+      expect(body.firstName).to.equal('Josip');
+      expect(body.lastName).to.equal('Josipić');
       expect(body.roles).include('USER');
       expect(body.roles).include('HEAD');
       expect(body.email).to.equal('headzpm@fer.hr');

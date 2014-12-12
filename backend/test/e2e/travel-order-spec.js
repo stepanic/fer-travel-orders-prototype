@@ -15,7 +15,7 @@ describe('TravelOrder CRUD', function() {
       },
       form: {
         budgetsourcecode: share.budgetsources[0].code,
-        countrycode: share.countries[0].code,
+        countrycode: share.countries[1].code,
         datetimeStart: moment.tz("2014-11-29 11:45:21", "Europe/Zagreb").toISOString(),
         datetimeFinish: moment.tz("2014-12-7 21:00", "Europe/Zagreb").toISOString(),
         items: [
@@ -631,6 +631,31 @@ describe('TravelOrder CRUD', function() {
       }
 
       done();
+    }).catch(function(e){
+      console.log.verbose("Error", e);
+      done(e);
+    });
+  });
+
+  it('Generate TravelOrder [0] PDF', function(done) {
+    request({
+      url: "http://localhost:1337/api/travelorder/pdf",
+      method: 'PUT',
+      headers: {
+        token: 'mastersecret'
+      },
+      form: {
+        travelorderid: share.travelorders[0].id
+      }
+    }).then(function(response){
+      var result = response[0].toJSON();
+      var body = parseJSON(result.body);
+
+      console.log(body);
+
+      setTimeout(function() {
+        done();
+      }, 1500);
     }).catch(function(e){
       console.log.verbose("Error", e);
       done(e);
