@@ -407,6 +407,32 @@ describe('TravelOrder CRUD', function() {
     });
   });
 
+  it('Generate TravelOrder [0] PDF, should be isAllowedByDepartmentHead===false', function(done) {
+    request({
+      url: "http://localhost:1337/api/travelorder/pdf",
+      method: 'PUT',
+      headers: {
+        token: 'mastersecret'
+      },
+      form: {
+        travelorderid: share.travelorders[0].id
+      }
+    }).then(function(response){
+      var result = response[0].toJSON();
+      var body = parseJSON(result.body);
+
+      expect(result.statusCode).to.equal(200);
+      expect(body.summary).to.equal('TravelOrder PDF is generated!');
+
+      setTimeout(function() {
+        done();
+      }, 1500);
+    }).catch(function(e){
+      console.log.verbose("Error", e);
+      done(e);
+    });
+  });
+
   it('Error: allow travel order [0] is by ZPM user by user HEAD ZPR [3]', function(done) {
     request({
       url: "http://localhost:1337/api/travelorder/allow",
@@ -651,7 +677,62 @@ describe('TravelOrder CRUD', function() {
       var result = response[0].toJSON();
       var body = parseJSON(result.body);
 
-      console.log(body);
+      expect(result.statusCode).to.equal(200);
+      expect(body.summary).to.equal('TravelOrder PDF is generated!');
+
+      setTimeout(function() {
+        done();
+      }, 1500);
+    }).catch(function(e){
+      console.log.verbose("Error", e);
+      done(e);
+    });
+  });
+
+  it('Generate TravelOrder [0] PDF report', function(done) {
+    request({
+      url: "http://localhost:1337/api/travelorder/pdf",
+      method: 'PUT',
+      headers: {
+        token: 'mastersecret'
+      },
+      form: {
+        travelorderid: share.travelorders[0].id,
+        type: 'report'
+      }
+    }).then(function(response){
+      var result = response[0].toJSON();
+      var body = parseJSON(result.body);
+
+      expect(result.statusCode).to.equal(200);
+      expect(body.summary).to.equal('TravelOrder PDF is generated!');
+
+      setTimeout(function() {
+        done();
+      }, 1500);
+    }).catch(function(e){
+      console.log.verbose("Error", e);
+      done(e);
+    });
+  });
+
+  it('Generate TravelOrder [0] PDF report on more :)', function(done) {
+    request({
+      url: "http://localhost:1337/api/travelorder/pdf",
+      method: 'PUT',
+      headers: {
+        token: 'mastersecret'
+      },
+      form: {
+        travelorderid: share.travelorders[0].id,
+        type: 'report'
+      }
+    }).then(function(response){
+      var result = response[0].toJSON();
+      var body = parseJSON(result.body);
+
+      expect(result.statusCode).to.equal(200);
+      expect(body.summary).to.equal('TravelOrder PDF is generated!');
 
       setTimeout(function() {
         done();

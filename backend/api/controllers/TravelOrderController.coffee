@@ -3,6 +3,7 @@
  # @description :: Server-side logic for managing travel-orders
  # @help        :: See http://links.sailsjs.org/docs/controllers
 
+
 module.exports =
   allow: (req, res) ->
     travelorderid =  req.param 'travelorderid'
@@ -31,16 +32,12 @@ module.exports =
     PDFDocument = require 'pdfkit'
     moment = require 'moment-timezone'
 
-    doc = new PDFDocument()
-    # Path
-    pdfPath = 'pdf/proba'
-    # Create directory if not exists
-    if not fs.existsSync pdfPath
-      fs.mkdirSync pdfPath, 0o777
+    pdfType = "PUTNI NALOG"
+    type = req.param 'type'
+    if type is 'report'
+      pdfType = "IZVJEŠTAJ O ZAVRŠENOM SLUŽBENOM PUTOVANJU"
 
-    # Pipe it's output somewhere, like to a file or HTTP response
-    # See below for browser usage
-    doc.pipe fs.createWriteStream(pdfPath + '/output.pdf')
+    doc = new PDFDocument()
 
     TravelOrder.findOne({id: req.param 'travelorderid'}).populateAll().exec (err, travelorder) ->
       if err
@@ -55,8 +52,8 @@ module.exports =
             newCurrencies[c.name] = c
           currencies = newCurrencies
 
-          console.log currencies
-          console.log travelorder.toJSON()
+          sails.log.verbose currencies
+          sails.log.verbose travelorder.toJSON()
 
           fontNormal = 'fonts/arial.ttf'
           fontBold = 'fonts/arialbd.ttf'
@@ -64,6 +61,22 @@ module.exports =
 
           t = travelorder.toJSON()
 
+
+          # Path
+          pdfPath = "pdf/to#{t.id}"
+          # Create directory if not exists
+          if not fs.existsSync pdfPath
+            fs.mkdirSync pdfPath, 0o777
+
+          # Save to PDF file
+          now = moment().format "YYYY-MM-DD_HH-mm-ss"
+          fileName = "/PutniNalog_#{t.id}_#{now}.pdf"
+          if type is 'report'
+            fileName = "/Izvjestaj_#{t.id}_#{now}.pdf"
+          filePath = pdfPath + fileName
+          doc.pipe fs.createWriteStream filePath
+
+          # FER Logo
           doc.image('media/fer.png', 15, 15, fit: [100, 100])
 
           doc.font(fontNormal).fontSize(14).text("Sveučilište u Zagrebu", 0, 15,
@@ -74,7 +87,10 @@ module.exports =
             width: 612
             align: 'center')
 
-          doc.font(fontBold).fontSize(35).text("PUTNI NALOG", 0, 90,
+          fontSize = 35
+          if type is 'report'
+            fontSize = 24
+          doc.font(fontBold).fontSize(fontSize).text("#{pdfType}", 0, 90,
             width: 612
             align: 'center')
 
@@ -86,7 +102,7 @@ module.exports =
             width: 200
             align: 'left')
 
-          doc.font(fontNormal).fontSize(14).text("Autor:", 15, 180,
+          doc.font(fontNormal).fontSize(14).text("Podnositelj:", 15, 180,
             width: 200
             align: 'left')
           doc.font(fontNormal).fontSize(12).text("#{t.owner.title} #{t.owner.firstName} #{t.owner.lastName}", 15, 196,
@@ -158,18 +174,20 @@ module.exports =
               width: 200
               align: 'left')
 
-            current = t.country.dailyAllowanceSize * d.size
-            total += current
-            doc.font(fontNormal).fontSize(12).text("#{current} #{t.country.dailyAllowanceCurrency}", 100, y,
+            cur = t.country.dailyAllowanceSize * d.size
+            total += cur
+            doc.font(fontNormal).fontSize(12).text("#{cur.toFixed(2)} #{t.country.dailyAllowanceCurrency}", 100, y,
               width: 200
               align: 'left')
 
             y += 20
+          y1 = y
+          totalDailyAllowances = total
 
           doc.font(fontBold).fontSize(12).text("UKUPNO:", 15, y,
             width: 200
             align: 'left')
-          doc.font(fontBold).fontSize(12).text("#{total} #{t.country.dailyAllowanceCurrency}", 100, y,
+          doc.font(fontBold).fontSize(12).text("#{total.toFixed(2)} #{t.country.dailyAllowanceCurrency}", 100, y,
             width: 200
             align: 'left')
 
@@ -185,39 +203,96 @@ module.exports =
               width: 200
               align: 'left')
 
-            current = item.price * item.quantity
-            doc.font(fontNormal).fontSize(12).text("#{current} #{item.currency}", 400, y,
+            cur = item.price * item.quantity
+            doc.font(fontNormal).fontSize(12).text("#{cur.toFixed(2)} #{item.currency}", 400, y,
               width: 200
               align: 'left')
 
             # Convert to TravelOrder.country.dailyAllowanceCurrency
             if item.currency isnt t.country.dailyAllowanceCurrency
-              current = current * currencies[item.currency].exchangeRateToHRK / currencies[t.country.dailyAllowanceCurrency].exchangeRateToHRK
+              cur = cur * currencies[item.currency].exchangeRateToHRK / currencies[t.country.dailyAllowanceCurrency].exchangeRateToHRK
 
-            total += current
+            total += cur
 
-            doc.font(fontNormal).fontSize(12).text("#{current} #{t.country.dailyAllowanceCurrency}", 490, y,
+            doc.font(fontNormal).fontSize(12).text("#{cur.toFixed(2)} #{t.country.dailyAllowanceCurrency}", 490, y,
               width: 200
               align: 'left')
 
             y += 20
+          y2 = y
+          totalExpenses = total
 
           doc.font(fontBold).fontSize(12).text("UKUPNO:", 280, y,
             width: 200
             align: 'left')
-          doc.font(fontBold).fontSize(12).text("#{total} #{t.country.dailyAllowanceCurrency}", 490, y,
+          doc.font(fontBold).fontSize(12).text("#{total.toFixed(2)} #{t.country.dailyAllowanceCurrency}", 490, y,
             width: 200
             align: 'left')
 
+          # Continue text after longest column
+          y = Math.max y1, y2
+          y += 30
 
+          doc.font(fontBold).fontSize(12).text("RAZLIKA: Dnevnice - Troškovi = ", 15, y,
+            width: 200
+            align: 'left')
 
+          doc.font(fontBold).fontSize(12).text("#{(totalDailyAllowances - totalExpenses).toFixed(2)} #{t.country.dailyAllowanceCurrency}", 200, y,
+            width: 200
+            align: 'left')
 
+          # Footer
+          ownerSign = "#{t.owner.title} #{t.owner.firstName} #{t.owner.lastName}"
+          underlineOwnerSign = "___________________________"
+          doc.font(fontBold).fontSize(12).text("Podnositelj", 15, 640,
+            width: 220
+            align: 'center')
+          doc.font(fontBold).fontSize(12).text("#{underlineOwnerSign}", 15, 680,
+            width: 220
+            align: 'center')
+          doc.font(fontNormal).fontSize(12).text("#{ownerSign}", 15, 700,
+            width: 220
+            align: 'center')
 
-          # end and display the document in the iframe to the right
+          doc.font(fontNormal).fontSize(12).text("Zagreb", 0, 640,
+            width: 612
+            align: 'center')
+          now = moment().format("DD.MM.YYYY.")
+          doc.font(fontNormal).fontSize(12).text("#{now}", 0, 660,
+            width: 612
+            align: 'center')
+
+          deanSign = "#{current.deanSignature}"
+          underlineDeanSign = "___________________________"
+          doc.font(fontBold).fontSize(12).text("Dekan", 377, 640,
+            width: 220
+            align: 'center')
+          doc.font(fontBold).fontSize(12).text("#{underlineDeanSign}", 377, 680,
+            width: 220
+            align: 'center')
+          doc.font(fontNormal).fontSize(12).text("#{deanSign}", 377, 700,
+            width: 220
+            align: 'center')
+
+          # End of PDF document
           doc.end()
 
-          return res.json 200,
-            summary: "TravelOrder PDF is generated!"
+          if type is 'report'
+            travelorder.travelOrderReportPDFs.push filePath
+          else
+            travelorder.travelOrderPDFs.push filePath
+
+          travelorder.save (err, s) ->
+            if err
+              return res.json 400, err
+
+            return res.json 200,
+              summary: "TravelOrder PDF is generated!"
+
+
+
+
+
 
 
 
