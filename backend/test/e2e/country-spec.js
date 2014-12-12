@@ -15,7 +15,8 @@ describe('Country CRUD', function() {
       form: {
         code: 'HR',
         name: 'Hrvatska',
-        dailyAllowanceCurrency: 'HRK'
+        dailyAllowanceCurrency: 'HRK',
+        dailyAllowanceSize: 170
       }
     }).then(function(response){
 
@@ -32,6 +33,7 @@ describe('Country CRUD', function() {
       expect(body.code).to.equal('HR');
       expect(body.name).to.equal('Hrvatska');
       expect(body.dailyAllowanceCurrency).to.equal('HRK');
+      expect(body.dailyAllowanceSize).to.equal(170);
 
       share.countries[0] = body;
 
@@ -47,7 +49,8 @@ describe('Country CRUD', function() {
         form: {
           code: 'DE',
           name: 'Njemačka',
-          dailyAllowanceCurrency: 'EUR'
+          dailyAllowanceCurrency: 'EUR',
+          dailyAllowanceSize: 70
         }
       });
     }).then(function(response){
@@ -65,6 +68,7 @@ describe('Country CRUD', function() {
       expect(body.code).to.equal('DE');
       expect(body.name).to.equal('Njemačka');
       expect(body.dailyAllowanceCurrency).to.equal('EUR');
+      expect(body.dailyAllowanceSize).to.equal(70);
 
       share.countries[1] = body;
 
@@ -80,7 +84,8 @@ describe('Country CRUD', function() {
         form: {
           code: 'US',
           name: 'SAD',
-          dailyAllowanceCurrency: 'USD'
+          dailyAllowanceCurrency: 'USD',
+          dailyAllowanceSize: 95
         }
       });
     }).then(function(response){
@@ -98,6 +103,7 @@ describe('Country CRUD', function() {
       expect(body.code).to.equal('US');
       expect(body.name).to.equal('SAD');
       expect(body.dailyAllowanceCurrency).to.equal('USD');
+      expect(body.dailyAllowanceSize).to.equal(95);
 
       share.countries[2] = body;
 

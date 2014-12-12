@@ -27,5 +27,9 @@ module.exports =
       type: "string"
       required: true
       enum: validationValues.currencies
+    dailyAllowanceSize:
+      type: "float"
+      required: true
+      min: 0
 
 

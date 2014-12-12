@@ -20,7 +20,7 @@ describe('TravelOrder CRUD', function() {
         datetimeFinish: moment.tz("2014-12-7 21:00", "Europe/Zagreb").toISOString(),
         items: [
           {
-            name: 'Smjestaj',
+            name: 'Smještaj',
             quantity: 7,
             price: 58.99,
             currency: 'EUR'
@@ -552,7 +552,7 @@ describe('TravelOrder CRUD', function() {
   it('Allow user [2] username: user to Update travel order [0], which are owner', function(done) {
     // Add on end of array one new element
     share.travelorders[0].items.push ({
-      name: "Nabavka promotivnih materijala",
+      name: "Promotivni materijali",
       price: 1235.65,
       currency: 'HRK'
     });
