@@ -29,6 +29,7 @@ module.exports.policies = {
   '*': ['authenticated'],
 
   UserController: {
+    'auth': ['authenticated'],
     'find': ['authenticated'],
     'update': ['authenticated', 'disableEditOtherUsers', 'isCorrectBlueprintRequest'],
     'create': ['isCorrectBlueprintRequest', policyBuilder.policyOR(['hasMasterToken', 'isAdmin'])],

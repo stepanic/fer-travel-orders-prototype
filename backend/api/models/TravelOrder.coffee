@@ -60,7 +60,13 @@ module.exports =
 
         allowanceSize = 1
 
-        if i is 0 or i is diffDays
+        if i is 0
+          if currentDate.hour() > 16
+            allowanceSize = 0
+          else if currentDate.hour() > 12
+            allowanceSize = 0.5
+
+        else if i is diffDays
           if currentDate.hour() < 8
             allowanceSize = 0
           else if currentDate.hour() < 12

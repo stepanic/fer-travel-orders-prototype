@@ -48,6 +48,7 @@ module.exports.routes = {
   ***************************************************************************/
 
 
+  'get /api/auth': 'UserController.auth',
   'put /api/travelorder/allow': 'TravelOrderController.allow',
   'get /api/travelorder/myall': 'TravelOrderController.myall',
   'put /api/travelorder/pdf': 'TravelOrderController.generatePDF'

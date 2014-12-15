@@ -63,7 +63,7 @@ describe('TravelOrder CRUD', function() {
       var date = moment.tz("2014-11-29 11:45:21", "Europe/Zagreb");
       for(var i = 0; i < body.dailyAllowances.length; i++) {
         if (i === 0) {
-          expect(body.dailyAllowances[i].size).to.equal(0.5);
+          expect(body.dailyAllowances[i].size).to.equal(1);
         } else if (i === (body.dailyAllowances.length - 1)) {
           date = moment.tz("2014-12-7 21:00", "Europe/Zagreb");
           expect(body.dailyAllowances[i].size).to.equal(1);
@@ -120,7 +120,7 @@ describe('TravelOrder CRUD', function() {
       var date = moment.tz("2014-11-29 14:45:21", "Europe/Zagreb");
       for(var i = 0; i < body.dailyAllowances.length; i++) {
         if (i === 0) {
-          expect(body.dailyAllowances[i].size).to.equal(1);
+          expect(body.dailyAllowances[i].size).to.equal(0.5);
         } else if (i === (body.dailyAllowances.length - 1)) {
           date = moment.tz("2014-12-7 21:00", "Europe/Zagreb");
           expect(body.dailyAllowances[i].size).to.equal(1);
@@ -176,7 +176,7 @@ describe('TravelOrder CRUD', function() {
       var date = moment.tz("2013-5-6 10:41:51", "Europe/Zagreb");
       for(var i = 0; i < body.dailyAllowances.length; i++) {
         if (i === 0) {
-          expect(body.dailyAllowances[i].size).to.equal(0.5);
+          expect(body.dailyAllowances[i].size).to.equal(1);
         } else if (i === (body.dailyAllowances.length - 1)) {
           date = moment.tz("2013-5-17 9:00", "Europe/Zagreb");
           expect(body.dailyAllowances[i].size).to.equal(0.5);
@@ -232,7 +232,7 @@ describe('TravelOrder CRUD', function() {
       var date = moment.tz("2013-5-6 2:41:51", "Europe/Zagreb");
       for(var i = 0; i < body.dailyAllowances.length; i++) {
         if (i === 0) {
-          expect(body.dailyAllowances[i].size).to.equal(0);
+          expect(body.dailyAllowances[i].size).to.equal(1);
         } else if (i === (body.dailyAllowances.length - 1)) {
           date = moment.tz("2013-5-17 4:34", "Europe/Zagreb");
           expect(body.dailyAllowances[i].size).to.equal(0);
