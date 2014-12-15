@@ -26,8 +26,14 @@ before(function (done) {
   this.timeout(6000);
   console.log("Lifting sails");
   // Lift Sails with test database
-  Sails.lift(require('rc')('sails')
-  , function(err, sailsInstance){
+  var options = require('rc')('sails');
+  options.log = {
+    level: 'error'
+  };
+  options.models = {
+    migrate: 'drop'
+  };
+  Sails.lift(options, function(err, sailsInstance){
     if (err)
       return done(err);
     console.log("Sails lifted");
