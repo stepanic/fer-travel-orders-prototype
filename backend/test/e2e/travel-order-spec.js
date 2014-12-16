@@ -87,13 +87,70 @@ describe('TravelOrder CRUD', function() {
     });
   });
 
-  it('create-travel-order with budgetsourcecode, countrycode param 2', function(done) {
+  it('create-travel-order with budgetsourcecode, countrycode param 2 for user [0]', function(done) {
     request({
       url: "http://localhost:1337/api/travelorder",
       method: 'POST',
       headers: {
         username: share.users[0].username,
         password: share.users[0].password
+      },
+      form: {
+        budgetsourcecode: share.budgetsources[0].code,
+        countrycode: share.countries[1].code,
+        datetimeStart: moment.tz("2014-11-29 14:45:21", "Europe/Zagreb").toISOString(),
+        datetimeFinish: moment.tz("2014-12-7 21:00", "Europe/Zagreb").toISOString()
+      }
+    }).then(function(response){
+
+      var result = response[0].toJSON();
+      var body = parseJSON(result.body);
+      console.log.verbose("body", body);
+      console.log.verbose("result", result);
+      console.log.verbose("result.body", result.body);
+
+      console.log.verbose("body.datetimeStart UTC", body.datetimeStart);
+      console.log.verbose("body.datetimeStart Europe/Zagreb", moment(body.datetimeStart).tz("Europe/Zagreb").format("YYYY-MM-DD HH:mm:ss"));
+
+      expect(result.statusCode).to.equal(200);
+      expect(body.id).to.exist;
+      expect(body.datetimeStart).to.equal(moment.tz("2014-11-29 14:45:21", "Europe/Zagreb").toISOString());
+      expect(body.datetimeFinish).to.equal(moment.tz("2014-12-7 21:00", "Europe/Zagreb").toISOString());
+
+      var date = moment.tz("2014-11-29 14:45:21", "Europe/Zagreb");
+      for(var i = 0; i < body.dailyAllowances.length; i++) {
+        if (i === 0) {
+          expect(body.dailyAllowances[i].size).to.equal(0.5);
+        } else if (i === (body.dailyAllowances.length - 1)) {
+          date = moment.tz("2014-12-7 21:00", "Europe/Zagreb");
+          expect(body.dailyAllowances[i].size).to.equal(1);
+        } else {
+          expect(body.dailyAllowances[i].size).to.equal(1);
+        }
+
+        expect(body.dailyAllowances[i].datetime).to.equal(date.toISOString());
+        date.add(1, "days");
+      }
+
+      expect(body.createdAt).to.exist;
+      expect(body.updatedAt).to.exist;
+
+      share.travelorders[2] = body;
+
+      done();
+    }).catch(function(e){
+      console.log.verbose("Error", e);
+      done(e);
+    });
+  });
+
+  it('create-travel-order with budgetsourcecode, countrycode param 2 for user [2]', function(done) {
+    request({
+      url: "http://localhost:1337/api/travelorder",
+      method: 'POST',
+      headers: {
+        username: share.users[2].username,
+        password: share.users[2].password
       },
       form: {
         budgetsourcecode: share.budgetsources[0].code,
@@ -653,7 +710,7 @@ describe('TravelOrder CRUD', function() {
 
       expect(result.statusCode).to.equal(200);
       for (var i = 0; i < body.length; i++) {
-        expect(share.users[2].id).to.equal(body[i].owner);
+        expect(share.users[2].id).to.equal(body[i].owner.id);
       }
 
       done();
