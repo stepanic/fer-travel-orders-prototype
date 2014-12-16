@@ -63,7 +63,7 @@ module.exports =
 
 
           # Path
-          pdfPath = "pdf/to#{t.id}"
+          pdfPath = "assets/pdf/to#{t.id}"
           # Create directory if not exists
           if not fs.existsSync pdfPath
             fs.mkdirSync pdfPath, 0o777
@@ -75,6 +75,10 @@ module.exports =
             fileName = "/Izvjestaj_#{t.id}_#{now}.pdf"
           filePath = pdfPath + fileName
           doc.pipe fs.createWriteStream filePath
+
+          # Without assets
+          pdfPath = "pdf/to#{t.id}"
+          filePath = pdfPath + fileName
 
           # FER Logo
           doc.image('media/fer.png', 15, 15, fit: [100, 100])
