@@ -6,6 +6,24 @@ body {
   z-index: 10000;
 }
 
+#loading-bar .bar {
+  background: #ffffff;
+}
+#loading-bar-spinner .spinner-icon {
+  //background: #ffffff;
+  border: solid 5px transparent;
+  border-top-color: #ffffff;
+  border-left-color: #ffffff;
+  height: 35px;
+  width: 35px;
+  border-radius: 30px;
+  -webkit-animation: loading-bar-spinner 600ms linear infinite;
+  -moz-animation:    loading-bar-spinner 600ms linear infinite;
+  -ms-animation:     loading-bar-spinner 600ms linear infinite;
+  -o-animation:      loading-bar-spinner 600ms linear infinite;
+  animation:         loading-bar-spinner 600ms linear infinite;
+}
+
 .browsehappy {
   margin: 0.2em 0;
   background: #ccc;

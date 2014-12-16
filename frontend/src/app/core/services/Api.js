@@ -20,8 +20,11 @@
               }
             }
 
-            function collection(model, params) {
+            function collection(model, where) {
               var request = defaultRequest;
+              request.params = {
+                where: where
+              };
               return $http
                 .get(BackendConfig.url + "/api/" + model, request);
             }

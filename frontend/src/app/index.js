@@ -12,6 +12,7 @@ angular.module('frontend',
     'ngTable',
     'angularMoment',
     'cfp.loadingBar',
+    'ui.bootstrap.datetimepicker',
     'frontend.core'
   ])
   .constant('angularMomentConfig', {
