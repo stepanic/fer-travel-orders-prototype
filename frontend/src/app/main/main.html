@@ -5,7 +5,14 @@
 
   <div class="row">
     <div class="col-md-12 "  >
-      <h3>Pristup aplikaciji je moguć tek nakon uspješne prijave (autorizacije korisnika)!</h3>
+      <h3  ng-show="!isAuthenticated">
+        Pristup aplikaciji je moguć tek nakon uspješne prijave (autorizacije korisnika)!
+      </h3>
+      <h3  ng-show="isAuthenticated">
+        Dobrodošli u FER aplikaciju za izradu putnih naloga.
+        <br><br>
+        Sve akcije za koje imate ovlasti dostupne su navigacijskoj traci.
+      </h3>
     </div>
   </div>
 

@@ -1,11 +1,28 @@
 'use strict';
 
-angular.module('frontend', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'restangular', 'ui.router'])
+angular.module('frontend',
+  [
+    'ngAnimate',
+    'ngCookies',
+    'ngTouch',
+    'ngSanitize',
+    'restangular',
+    'ui.router',
+    'sails.io',
+    'ngTable',
+    'angularMoment',
+    'frontend.core'
+  ])
+  .constant('angularMomentConfig', {
+    timezone: 'UTC'
+  })
   .config([
     '$stateProvider',
     '$urlRouterProvider',
     '$locationProvider',
-    function ($stateProvider, $urlRouterProvider, $locationProvider) {
+    '$httpProvider',
+    '$sailsSocketProvider',
+    function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $sailsSocketProvider) {
       $stateProvider
         .state('home', {
           url: '/',
@@ -13,13 +30,52 @@ angular.module('frontend', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', '
           controller: 'MainCtrl'
         });
 
+      $stateProvider
+        .state('login', {
+          url: '/login',
+          templateUrl: 'app/login/login.html',
+          controller: 'LoginCtrl'
+        });
+
+      $stateProvider
+        .state('travelorder', {
+          url: '/travelorder',
+          templateUrl: 'app/travelOrder/travelOrder.html',
+          controller: 'TravelOrderCtrl'
+        });
+
       $urlRouterProvider.otherwise('/');
 
-      // Yeah we wanna to use HTML5 urls!
       $locationProvider
-          .html5Mode(true)
-          .hashPrefix('!')
+          .html5Mode(false)
       ;
+
+      $httpProvider.defaults.useXDomain = true;
+      delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
+    }
+  ])
+  .run([
+    '$rootScope',
+    '$location',
+    '$state',
+    'Auth',
+    function ($rootScope, $location, $state, Auth) {
+      $rootScope.isAuthenticated = Auth.isAuthenticated();
+
+      if ($rootScope.isAuthenticated !== true) {
+        $location.path('/login');
+      }
+
+      $rootScope.$on('$stateChangeStart', function () {
+        if ($state.current.name !== 'login') {
+          if (!$rootScope.isAuthenticated) {
+            $location.path('/login');
+            console.log($state);
+          }
+        }
+      });
+
     }
   ])
 ;

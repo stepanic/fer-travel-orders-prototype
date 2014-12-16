@@ -1,7 +1,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top" ng-controller="NavbarCtrl">
   <div class="container">
     <div class="navbar-header">
-      <a class="navbar-brand" href="/">
+      <a class="navbar-brand" ng-href="#/">
         <img alt="FER" src="/apple-touch-icon.png" id="navbar-brand-image">
         FER Putni nalozi
       </a>
@@ -9,13 +9,15 @@
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
       <ul class="nav navbar-nav">
+        <li ng-show="true"><a ng-href="#/travelorder">Moji putni nalozi</a></li>
+
         <!-- <li class="active"><a ng-href="#">Home</a></li>
-        <li><a ng-href="#">About</a></li>
         <li><a ng-href="#">Contact</a></li> -->
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
-        <li><a ng-href="#">Prijava</a></li>
+        <li ng-show="!isAuthenticated"><a ng-href="#/login">Prijava</a></li>
+        <li ng-show="isAuthenticated"><a ng-click="logout()" style="cursor: pointer;">Odjava</a></li>
       </ul>
     </div>
   </div>

@@ -12,6 +12,9 @@
     <link rel="stylesheet" href="app/vendor.css">
 
     <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="bower_components/ng-table/ng-table.css" />
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -29,6 +32,31 @@
     <![endif]-->
 
     <div ui-view></div>
+
+    <!-- Socket IO setter to enable change from Angular service -->
+    <script>
+        (function onLoad() {
+            var io;
+            Object.defineProperty(window, 'io', {
+                get: function get() {
+                    return io;
+                },
+                set: function set(value) {
+                    var sails;
+                    io = value;
+                    Object.defineProperty(io, 'sails', {
+                        get: function get() {
+                            return sails;
+                        },
+                        set: function set(value) {
+                            sails = value;
+                            sails.url = 'http://localhost:1337';
+                        }
+                    });
+                }
+            });
+        })();
+    </script>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
@@ -51,12 +79,37 @@
     <script src="bower_components/lodash/dist/lodash.compat.js"></script>
     <script src="bower_components/restangular/dist/restangular.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/sails.io.js/dist/sails.io.js"></script>
+    <script src="bower_components/angularSails/dist/ngsails.io.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/bootbox/bootbox.js"></script>
+    <script src="bower_components/ngBootbox/ngBootbox.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
+    <script src="bower_components/moment-timezone/builds/moment-timezone-with-data-2010-2020.js"></script>
+    <script src="bower_components/angular-moment/angular-moment.js"></script>
+    <script src="bower_components/ng-table/ng-table.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
     <!-- build:js({src,.tmp}) scripts/app.js -->
     <script src="app/index.js"></script>
     <script src="app/main/main.controller.js"></script>
+    <script src="app/login/login.controller.js"></script>
+    <script src="app/travelOrder/travelOrder.controller.js"></script>
+    <script src="app/travelOrder/travelOrder.model.js"></script>
+    <script src="app/core/core.js"></script>
+    <script src="app/core/constants/BackendConfig.js"></script>
+    <script src="app/core/libraries/libraries.js"></script>
+    <script src="app/core/libraries/Bootbox.js"></script>
+    <script src="app/core/libraries/LoDash.js"></script>
+    <script src="app/core/libraries/Moment.js"></script>
+    <script src="app/core/models/models.js"></script>
+    <script src="app/core/models/factory.js"></script>
+    <script src="app/core/services/services.js"></script>
+    <script src="app/core/services/DataService.js"></script>
+    <script src="app/core/services/Storage.js"></script>
+    <script src="app/core/services/Auth.js"></script>
+    <script src="app/core/services/Api.js"></script>
     <script src="components/navbar/navbar.controller.js"></script>
 
     <!-- inject:partials -->
