@@ -5,34 +5,44 @@ angular.module('frontend')
     '$scope',
     '$rootScope',
     '$filter',
+    '$timeout',
+    'cfpLoadingBar',
     'ngTableParams',
-    'amMoment',
     'Api',
-    function ($scope, $rootScope, $filter, ngTableParams, amMoment, Api) {
+    function ($scope, $rootScope, $filter, $timeout, cfpLoadingBar, ngTableParams, Api) {
+
+      function UpdateTable(delay) {
+        Api.myTravelOrders()
+          .then(function(response) {
+            cfpLoadingBar.start();
+            cfpLoadingBar.inc();
+            $timeout(function() {
+              $scope.data = response.data;
+              cfpLoadingBar.complete();
+            }, delay);
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      }
+      $scope.GeneratePDF = function(id, type) {
+        Api.generatePDF(id, type)
+          .then(function(response) {
+            UpdateTable(2000);
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      };
 
       $scope.model = {};
 
       $scope.data = []
+      UpdateTable(0);
+
       $scope.BackendUrl = Api.BackendUrl;
 
-      Api.myTravelOrders()
-        .then(function(response) {
-          $scope.data = response.data;
-          // console.log(response);
-          console.log($scope.data);
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-
-      // Date converter
-      // $scope.ConvertDate = function (datetime) {
-      //   var c = amMoment.utc(datetime).format('DD.MM.YYYY. HH:mm');
-      //   console.log(c);
-      //   console.log(amMoment);
-      //   return c;
-      // };
-
+      // ngTable
       $scope.tableParams = new ngTableParams({
           page: 1,
           count: 10,
@@ -50,11 +60,6 @@ angular.module('frontend')
           }
       });
 
-      $scope.editId = -1;
-
-      $scope.setEditId =  function(pid) {
-          $scope.editId = pid;
-      }
 
     }
   ]);

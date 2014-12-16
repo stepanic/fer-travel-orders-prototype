@@ -11,6 +11,7 @@ angular.module('frontend',
     'sails.io',
     'ngTable',
     'angularMoment',
+    'cfp.loadingBar',
     'frontend.core'
   ])
   .constant('angularMomentConfig', {
@@ -44,6 +45,13 @@ angular.module('frontend',
           controller: 'TravelOrderCtrl'
         });
 
+      $stateProvider
+        .state('travelorderform', {
+          url: '/travelorderform',
+          templateUrl: 'app/travelOrder/travelOrderForm.html',
+          controller: 'TravelOrderFormCtrl'
+        });
+
       $urlRouterProvider.otherwise('/');
 
       $locationProvider
@@ -67,11 +75,14 @@ angular.module('frontend',
         $location.path('/login');
       }
 
-      $rootScope.$on('$stateChangeStart', function () {
+      $rootScope.currentState = $state.current.name;
+
+      $rootScope.$on('$stateChangeSuccess', function () {
+        $rootScope.currentState = $state.current.name;
+
         if ($state.current.name !== 'login') {
           if (!$rootScope.isAuthenticated) {
             $location.path('/login');
-            console.log($state);
           }
         }
       });

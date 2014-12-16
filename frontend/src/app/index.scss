@@ -2,6 +2,10 @@ body {
   padding-top: 70px;
 }
 
+.modal-dialog {
+  z-index: 10000;
+}
+
 .browsehappy {
   margin: 0.2em 0;
   background: #ccc;

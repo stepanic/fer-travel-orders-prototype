@@ -27,9 +27,24 @@
             }
 
             function myTravelOrders() {
-              var request = defaultRequest;
+              var request = {
+                headers: {
+                  username: Storage.get('username'), // Force read after login
+                  password: Storage.get('password')
+                }
+              };
               return $http
                 .get(BackendConfig.url + "/api/travelorder/myall", request);
+            }
+
+            function generatePDF(id, type) {
+              var request = defaultRequest;
+              var data = {
+                travelorderid: id,
+                type: type
+              }
+              return $http
+                .put(BackendConfig.url + "/api/travelorder/pdf", data, request);
             }
 
 
@@ -37,6 +52,7 @@
             return {
               'collection': collection,
               'myTravelOrders': myTravelOrders,
+              'generatePDF': generatePDF,
 
               'BackendUrl': BackendConfig.url
             };

@@ -29,8 +29,12 @@
                     Download&nbsp;v{{key + 1}}
                   </a>
                 </div>
-              </div><div ng-if="p.travelOrderPDFs.length === 0" >
+              </div>
+              <div ng-if="p.travelOrderPDFs.length === 0" >
                 <span style="color: red" >NEMA</span>
+              </div>
+              <div>
+                <button class="btn btn-primary btn-xs" ng-click="GeneratePDF(p.id, null)">Generiraj PDF</button>
               </div>
             </td>
             <td class="rowTd" align="center" data-title="'Izveštaji PDF'" >
@@ -40,12 +44,14 @@
                     Download&nbsp;v{{key + 1}}
                   </a>
                 </div>
-              </div><div ng-if="p.travelOrderReportPDFs.length === 0" >
+              </div>
+              <div ng-if="p.travelOrderReportPDFs.length === 0" >
                 <span style="color: red" >NEMA</span>
               </div>
+              <div>
+                <button class="btn btn-primary btn-xs" ng-click="GeneratePDF(p.id, 'report')">Generiraj PDF</button>
+              </div>
             </td>
-            <td class="rowTd" ><input type=button id="editRowBtn{{p.id}}" value="edit"
-                                      ng-click="setEditId(p.id)"></td>
           </tr>
         </tbody>
     </table>

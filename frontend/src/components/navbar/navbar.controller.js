@@ -5,13 +5,9 @@ angular.module('frontend')
     '$scope',
     '$rootScope',
     '$location',
+    '$state',
     'Auth',
-    function ($scope, $rootScope, $location, Auth) {
-
-      // $rootScope.$watch('isAuthenticated', function() {
-      //   console.log($rootScope.isAuthenticated);
-      // });
-
+    function ($scope, $rootScope, $location, $state, Auth) {
       $scope.logout = function() {
         Auth.logout();
         $rootScope.isAuthenticated = false;
