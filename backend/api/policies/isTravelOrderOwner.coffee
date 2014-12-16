@@ -2,11 +2,13 @@ module.exports = (req, res, next) ->
   sails.log.verbose "Policy isTravelOrderOwner"
   sails.log.verbose req.param 'id'
 
-  travelorderid = req.param 'id'
 
   query = {}
-  if travelorderid
-    query.id = travelorderid
+  if req.param 'id'
+    query.id = req.param 'id'
+  else
+    query.id = req.param 'travelorderid'
+
 
   TravelOrder.findOne(query).exec (err, travelorder) ->
     sails.log.verbose "err", err, "travelorder", travelorder

@@ -778,7 +778,9 @@ describe('TravelOrder CRUD', function() {
       url: "http://localhost:1337/api/travelorder/pdf",
       method: 'PUT',
       headers: {
-        token: 'mastersecret'
+        // token: 'mastersecret'
+        username: share.users[2].username,
+        password: share.users[2].password
       },
       form: {
         travelorderid: share.travelorders[0].id,
