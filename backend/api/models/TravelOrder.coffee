@@ -23,10 +23,14 @@ module.exports =
 
       return true
 
+    datetimeStartShouldBeLessThandatetimeFinish: (start) ->
+      return start < @datetimeFinish
+
   attributes:
     datetimeStart:
       type: 'datetime'
       required: true
+      datetimeStartShouldBeLessThandatetimeFinish: true
     datetimeFinish:
       type: 'datetime'
       required: true

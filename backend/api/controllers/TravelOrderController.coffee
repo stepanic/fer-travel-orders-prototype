@@ -207,8 +207,12 @@ module.exports =
               width: 200
               align: 'left')
 
+            doc.font(fontNormal).fontSize(12).text("#{item.quantity}kom", 390, y,
+              width: 200
+              align: 'left')
+
             cur = item.price * item.quantity
-            doc.font(fontNormal).fontSize(12).text("#{cur.toFixed(2)} #{item.currency}", 400, y,
+            doc.font(fontNormal).fontSize(12).text("#{cur.toFixed(2)} #{item.currency}", 440, y,
               width: 200
               align: 'left')
 
@@ -218,7 +222,7 @@ module.exports =
 
             total += cur
 
-            doc.font(fontNormal).fontSize(12).text("#{cur.toFixed(2)} #{t.country.dailyAllowanceCurrency}", 490, y,
+            doc.font(fontNormal).fontSize(12).text("#{cur.toFixed(2)} #{t.country.dailyAllowanceCurrency}", 525, y,
               width: 200
               align: 'left')
 
@@ -229,7 +233,7 @@ module.exports =
           doc.font(fontBold).fontSize(12).text("UKUPNO:", 280, y,
             width: 200
             align: 'left')
-          doc.font(fontBold).fontSize(12).text("#{total.toFixed(2)} #{t.country.dailyAllowanceCurrency}", 490, y,
+          doc.font(fontBold).fontSize(12).text("#{total.toFixed(2)} #{t.country.dailyAllowanceCurrency}", 525, y,
             width: 200
             align: 'left')
 
