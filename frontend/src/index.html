@@ -57,6 +57,7 @@
                     });
                 }
             });
+
         })();
     </script>
 
@@ -82,7 +83,6 @@
     <script src="bower_components/restangular/dist/restangular.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/sails.io.js/dist/sails.io.js"></script>
-    <script src="bower_components/angularSails/dist/ngsails.io.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/bootbox/bootbox.js"></script>
     <script src="bower_components/ngBootbox/ngBootbox.js"></script>
@@ -92,8 +92,19 @@
     <script src="bower_components/ng-table/ng-table.js"></script>
     <script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
     <script src="bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
+
+    <!-- Avoid BrowserSync conflict -->
+    <script type="text/javascript">
+        (function onLoad() {
+            window.app = {
+                io: window.io
+            };
+        })();
+    </script>
+
 
     <!-- build:js({src,.tmp}) scripts/app.js -->
     <script src="app/index.js"></script>
@@ -108,6 +119,7 @@
     <script src="app/core/libraries/Bootbox.js"></script>
     <script src="app/core/libraries/LoDash.js"></script>
     <script src="app/core/libraries/Moment.js"></script>
+    <script src="app/core/libraries/ngsails.io.js"></script>
     <script src="app/core/models/models.js"></script>
     <script src="app/core/models/factory.js"></script>
     <script src="app/core/services/services.js"></script>

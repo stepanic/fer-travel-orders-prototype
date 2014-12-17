@@ -18,7 +18,7 @@
                 username: Storage.get('username'),
                 password: Storage.get('password')
               }
-            }
+            };
 
             function collection(model, where) {
               var request = defaultRequest;
@@ -26,7 +26,7 @@
                 where: where
               };
               return $http
-                .get(BackendConfig.url + "/api/" + model, request);
+                .get(BackendConfig.url + '/api/' + model, request);
             }
 
             function myTravelOrders() {
@@ -37,7 +37,7 @@
                 }
               };
               return $http
-                .get(BackendConfig.url + "/api/travelorder/myall", request);
+                .get(BackendConfig.url + '/api/travelorder/myall', request);
             }
 
             function generatePDF(id, type) {
@@ -45,9 +45,9 @@
               var data = {
                 travelorderid: id,
                 type: type
-              }
+              };
               return $http
-                .put(BackendConfig.url + "/api/travelorder/pdf", data, request);
+                .put(BackendConfig.url + '/api/travelorder/pdf', data, request);
             }
 
 

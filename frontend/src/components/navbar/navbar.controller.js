@@ -12,6 +12,6 @@ angular.module('frontend')
         Auth.logout();
         $rootScope.isAuthenticated = false;
         $location.path('/login');
-      }
+      };
     }
   ]);

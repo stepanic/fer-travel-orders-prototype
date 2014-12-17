@@ -11,7 +11,7 @@
 
       <div ng-show="data.length > 0" >
         <table ng-table="tableParams" class="table" >
-          <tbody ng-repeat="p in data">
+          <tbody ng-repeat="p in $data">
             <tr id="tr{{p.id}}" ng-class-odd="'odd'" ng-class-even="'even'">
               <td class="rowTd" data-title="'ID'" sortable="'id'">{{p.id}}</td>
               <td class="rowTd" align="center" data-title="'Početak'" sortable="'datetimeStart'">

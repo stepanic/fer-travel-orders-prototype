@@ -14,11 +14,19 @@
                 '$sailsSocket',
                 '_',
                 'BackendConfig',
+                'Storage',
                 function(
                     $sailsSocket,
                     _,
-                    BackendConfig
+                    BackendConfig,
+                    Storage
                 ) {
+                    function _getAuthHeadersAsParams() {
+                        return {
+                            username: Storage.get('username'),
+                            password: Storage.get('password')
+                        };
+                    }
                     /**
                      * Helper function to get "proper" end point url for sails backend API.
                      *
@@ -33,7 +41,7 @@
                             endPoint = endPoint + '/' + identifier;
                         }
 
-                        return BackendConfig.url + '/' + endPoint;
+                        return BackendConfig.url + '/api/' + endPoint;
                     }
 
                     /**
@@ -46,7 +54,7 @@
                      */
                     function _parseParameters(parameters) {
                         parameters = parameters || {};
-
+                        parameters.headers = _getAuthHeadersAsParams();
                         return {params: parameters};
                     }
 
@@ -102,6 +110,7 @@
                          * @returns {Promise|*}
                          */
                         'create': function createObject(endPoint, data) {
+                            data.headers = _getAuthHeadersAsParams();
                             return $sailsSocket
                                 .post(_parseEndPointUrl(endPoint), data);
                         },
@@ -116,6 +125,7 @@
                          * @returns {Promise|*}
                          */
                         'update': function updateObject(endPoint, identifier, data) {
+                            data.headers = _getAuthHeadersAsParams();
                             return $sailsSocket
                                 .put(_parseEndPointUrl(endPoint, identifier), data);
                         },

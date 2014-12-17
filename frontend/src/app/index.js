@@ -12,6 +12,7 @@ angular.module('frontend',
     'ngTable',
     'angularMoment',
     'cfp.loadingBar',
+    'ui.bootstrap',
     'ui.bootstrap.datetimepicker',
     'frontend.core'
   ])
@@ -62,14 +63,19 @@ angular.module('frontend',
       $httpProvider.defaults.useXDomain = true;
       delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
+
+
     }
   ])
   .run([
     '$rootScope',
     '$location',
     '$state',
+    '$sailsSocket',
     'Auth',
-    function ($rootScope, $location, $state, Auth) {
+    function ($rootScope, $location, $state, $sailsSocket, Auth) {
+
+
       $rootScope.isAuthenticated = Auth.isAuthenticated();
 
       if ($rootScope.isAuthenticated !== true) {

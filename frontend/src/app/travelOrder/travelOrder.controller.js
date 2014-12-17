@@ -11,14 +11,18 @@ angular.module('frontend')
     'Api',
     function ($scope, $rootScope, $filter, $timeout, cfpLoadingBar, ngTableParams, Api) {
 
-      function UpdateTable(delay) {
+      function UpdateTable(delay, cb) {
         Api.myTravelOrders()
           .then(function(response) {
             cfpLoadingBar.start();
             cfpLoadingBar.inc();
             $timeout(function() {
-              $scope.data = response.data;
+              data = response.data;
+              $scope.data = data;
               cfpLoadingBar.complete();
+              if (cb) {
+                cb();
+              }
             }, delay);
           })
           .catch(function(error) {
@@ -28,7 +32,9 @@ angular.module('frontend')
       $scope.GeneratePDF = function(id, type) {
         Api.generatePDF(id, type)
           .then(function(response) {
-            UpdateTable(2000);
+            UpdateTable(2000, function() {
+              $scope.tableParams.reload();
+            });
           })
           .catch(function(error) {
             console.log(error);
@@ -37,28 +43,39 @@ angular.module('frontend')
 
       $scope.model = {};
 
-      $scope.data = []
-      UpdateTable(0);
+      var data = [];
+      $scope.data = data;
+
+
+
+      UpdateTable(0, function() {
+        // ngTable
+        $scope.tableParams = new ngTableParams({
+            page: 1,
+            count: 5,
+            sorting: {
+              'id': 'desc'
+            }
+        },{
+            total: data.length,
+            getData: function($defer, params) {
+                var orderedData = params.sorting() ?
+                                  $filter('orderBy')(data, params.orderBy()) :
+                                  data;
+
+                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+            }
+        });
+      });
+
+
+
+      console.log($scope.tableParams);
 
       $scope.BackendUrl = Api.BackendUrl;
 
-      // ngTable
-      $scope.tableParams = new ngTableParams({
-          page: 1,
-          count: 10,
-          sorting: {
-            id: 'asc'
-          }
-      },{
-          total: $scope.data.length,
-          getData: function($defer, params) {
-              var orderedData = params.sorting() ?
-                                $filter('orderBy')($scope.data, params.orderBy()) :
-                                $scope.data;
-              $scope.data = orderedData;
-              $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-          }
-      });
+
+
 
 
     }

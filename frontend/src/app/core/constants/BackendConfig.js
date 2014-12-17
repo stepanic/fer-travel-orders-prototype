@@ -9,7 +9,9 @@
     'use strict';
 
     angular.module('frontend')
-        .constant('BackendConfig', {
-            url: window.io.sails.url
-        });
+        .service('BackendConfig', ['$window', function($window){
+          return {
+              'url': $window.app.io.sails.url
+          }
+        }]);
 }());

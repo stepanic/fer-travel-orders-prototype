@@ -8,6 +8,7 @@
 
       <form class="form-horizontal" role="form">
 
+
         <div class="form-group">
           <label for="inputBudgetSource" class="col-sm-4 control-label">Troškove podmiruje:</label>
           <div class="col-sm-8">
@@ -64,6 +65,62 @@
           </div>
         </div>
 
+        <div class="form-group">
+          <label class="col-sm-4 control-label">
+            Troškovi:
+          </label>
+          <div class="col-sm-2 control-label" style="text-align: center">
+            Naziv
+          </div>
+          <div class="col-sm-1 control-label" style="text-align: center">
+            Količina
+          </div>
+          <div class="col-sm-2 control-label" style="text-align: center">
+            Cijena
+          </div>
+          <div class="col-sm-2 control-label" style="text-align: center">
+            Valuta
+          </div>
+        </div>
+
+        <div class="form-group" ng-repeat="(key, item) in model.items">
+          <div class="col-sm-offset-4 col-sm-2 control-label" style="text-align: center">
+            <input type="text" class="form-control"
+              typeahead="itemName.name for itemName in model.travelorderitems | filter:$viewValue | limitTo:8" class="form-control"
+              ng-model="model.items[key].name"
+              placeholder="Naziv">
+          </div>
+          <div class="col-sm-1 control-label" style="text-align: center">
+            <input type="text" class="form-control"
+              ng-model="model.items[key].quantity"
+              placeholder="0">
+          </div>
+          <div class="col-sm-2 control-label" style="text-align: center">
+            <input type="text" class="form-control"
+              ng-model="model.items[key].price" placeholder="Cijena">
+          </div>
+          <div class="col-sm-2 control-label" style="text-align: center">
+            <select
+                class="form-control"
+                ng-model="model.items[key].currency" ng-options="c.name for c in model.currencies">
+            </select>
+          </div>
+          <div class="col-sm-1 control-label" style="text-align: center">
+            <button class="btn btn-danger btn-block" type="submit" ng-click="RemoveItem(key)" title="Ukloni stavku!">
+              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-offset-4 col-sm-8 control-label" style="text-align: left">
+            <button class="btn btn-primary btn-block" type="submit" ng-click="AddNewItem()" title="Dodaj novu stavku!">
+              <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" style="top:2px;"></span>
+              <span>Dodaj novu stavku...</span>
+            </button>
+          </div>
+        </div>
+
 
 
 
@@ -71,8 +128,8 @@
 
         <div class="form-group">
           <div class="col-sm-offset-4 col-sm-8">
-            <button type="submit" class="btn btn-success">Spremiti</button>
-            <button type="reset" class="btn btn-danger">Obrisati sve</button>
+            <button type="submit" class="btn btn-success" ng-click="SaveTravelOrder()">Spremiti</button>
+            <button type="reset" class="btn btn-danger" ng-click="CleanForm()">Obrisati sve</button>
           </div>
         </div>
 

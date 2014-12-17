@@ -27,9 +27,6 @@ function browserSyncInit(baseDir, files, browser) {
       middleware: middleware,
       routes: routes
     },
-    ghostMode: {
-        links: false
-    },
     browser: browser
   });
 
