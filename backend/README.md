@@ -1,6 +1,8 @@
 # Sails.js Backend App
 ```sh
 $ cd backend
+$ sudo npm install sails -g
+$ sudo npm install grunt-cli -g
 ```
 
 ## Prepare app:
@@ -11,13 +13,11 @@ $ npm install
 
 ##How to run app on localhost?
 ```sh
-$ sudo npm install sails -g
 $ sails lift --verbose
 ```
 
 ##How to run E2E tests?
 ```sh
-$ sudo npm install grunt-cli -g
 $ grunt test:e2e
 ```
 
