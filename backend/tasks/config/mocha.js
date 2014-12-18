@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
 // Configure a mochaTest task
 grunt.config.set('mochaTest', {
-  test: {
+  e2e: {
     options: {
       ui: 'bdd',
       reporter: 'list',

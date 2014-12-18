@@ -1,24 +1,25 @@
 # Sails.js Backend App
+```sh
+$ cd backend
+```
 
-## After git clone of this repo:
-
-Copy file /config/local.js.bak to /config/local.js
+## Prepare app:
+```sh
+$ cp config/local.js.bak config/local.js
+$ npm install
+```
 
 ##How to run app on localhost?
 ```sh
 $ sudo npm install sails -g
-$ npm install
-$ sails lift
-$ app is served on http://localhost:1337
+$ sails lift --verbose
 ```
 
-##How to run tests?
+##How to run E2E tests?
 ```sh
-$ sudo npm install mocha -g
 $ sudo npm install grunt -g
-$ npm install (if not before)
-$ grunt mochaTest
+$ grunt test:e2e
 ```
 
-After `grunt mochaTest` app will have data in database!!!
+After `grunt test:e2e` app will have data in database!!!
 
