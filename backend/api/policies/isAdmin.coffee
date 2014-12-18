@@ -6,3 +6,4 @@ module.exports = (req, res, next) ->
       res.forbidden "You are not an Administrator!"
   else
     res.forbidden "You are not an Authenticated!"
+

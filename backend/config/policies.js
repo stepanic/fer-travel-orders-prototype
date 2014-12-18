@@ -67,6 +67,10 @@ module.exports.policies = {
     'myall': [
       'authenticated'
     ],
+    'waitingapprove': [
+      policyBuilder.policyOR(['hasMasterToken', 'authenticated']),
+      policyBuilder.policyOR(['hasMasterToken', 'isDean', 'hasHeadRole'])
+    ],
     'destroy': ['authenticated', 'isAdmin'],
     'generatePDF': [
       policyBuilder.policyOR(['hasMasterToken', 'authenticated']),

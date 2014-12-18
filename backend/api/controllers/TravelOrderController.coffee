@@ -27,6 +27,37 @@ module.exports =
         res.json 200,
           travelorders
 
+  waitingApprove: (req, res) ->
+    TravelOrder.find().populateAll().exec (err, travelorders) ->
+      if err
+        res.json 403,
+          summary: "Error: You are not allowed to read all waitingApprove Travel orders!"
+      else
+        i = 0
+        isDean = 'DEAN' in current.user.roles
+        isDepartmentHead = 'HEAD' in current.user.roles
+        while i < travelorders.length
+          t = travelorders[i]
+
+          toSplice = false
+
+          if not isDean and isDepartmentHead and t.owner.department isnt current.user.department
+            toSplice = true
+
+          if not toSplice
+            for a in t.allowedBy
+              if a.id is current.user.id
+                toSplice = true
+                break
+
+          if toSplice
+            travelorders.splice(i, 1)
+          else
+            i++
+
+        res.json 200,
+          travelorders
+
   generatePDF: (req, res) ->
     fs = require 'fs'
     PDFDocument = require 'pdfkit'

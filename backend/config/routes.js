@@ -53,6 +53,7 @@ module.exports.routes = {
 
   'put /api/travelorder/allow': 'TravelOrderController.allow',
   'get /api/travelorder/myall': 'TravelOrderController.myall',
+  'get /api/travelorder/waitingapprove': 'TravelOrderController.waitingApprove',
   'put /api/travelorder/pdf': 'TravelOrderController.generatePDF'
 
 };
