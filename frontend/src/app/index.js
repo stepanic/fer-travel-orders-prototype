@@ -54,6 +54,13 @@ angular.module('frontend',
           controller: 'TravelOrderFormCtrl'
         });
 
+      $stateProvider
+        .state('travelorderenable', {
+          url: '/travelorderenable',
+          templateUrl: 'app/travelOrder/travelOrderEnable.html',
+          controller: 'TravelOrderEnableCtrl'
+        });
+
       $urlRouterProvider.otherwise('/');
 
       $locationProvider
@@ -77,6 +84,14 @@ angular.module('frontend',
 
 
       $rootScope.isAuthenticated = Auth.isAuthenticated();
+      $rootScope.user = Auth.user();
+
+      if ($rootScope.user.roles.indexOf('DEAN') !== -1) {
+        $rootScope.isDean = true;
+      }
+      if ($rootScope.user.roles.indexOf('HEAD') !== -1) {
+        $rootScope.isDepartmentHead = true;
+      }
 
       if ($rootScope.isAuthenticated !== true) {
         $location.path('/login');

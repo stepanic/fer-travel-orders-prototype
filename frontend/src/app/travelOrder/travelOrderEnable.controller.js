@@ -1,18 +1,53 @@
 'use strict';
 
 angular.module('frontend')
-  .controller('TravelOrderCtrl', [
+  .controller('TravelOrderEnableCtrl', [
     '$scope',
     '$rootScope',
     '$filter',
     '$timeout',
     'cfpLoadingBar',
     'ngTableParams',
+    'bootbox',
     'Api',
-    function ($scope, $rootScope, $filter, $timeout, cfpLoadingBar, ngTableParams, Api) {
+    function ($scope, $rootScope, $filter, $timeout, cfpLoadingBar, ngTableParams, bootbox, Api) {
+
+      function Enable(id) {
+        Api.allow(id)
+          .then(function (response) {
+            UpdateTable(0, function() {
+              $scope.tableParams.reload();
+
+              var lastPage = $scope.data.length / $scope.tableParams.$params.count;
+              lastPage += 1;
+              $scope.tableParams.total($scope.data.length);
+
+              if ($scope.tableParams.$params.page >= lastPage) {
+                $scope.tableParams.page($scope.tableParams.$params.page - 1);
+              }
+            });
+            bootbox.dialog({
+              title: "Putni nalog je uspješno odobren!",
+              message: 'Putni nalog ID: ' + id,
+              buttons: {
+                danger: {
+                  label: "Zatvoriti",
+                  className: "btn-danger",
+                  callback: function() {
+
+                  }
+                }
+              }
+            });
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
+      $scope.Enable = Enable;
 
       function UpdateTable(delay, cb) {
-        Api.myTravelOrders()
+        Api.waitingApprove()
           .then(function(response) {
             cfpLoadingBar.start();
             cfpLoadingBar.inc();
@@ -29,17 +64,6 @@ angular.module('frontend')
             console.log(error);
           });
       }
-      $scope.GeneratePDF = function(id, type) {
-        Api.generatePDF(id, type)
-          .then(function(response) {
-            UpdateTable(2000, function() {
-              $scope.tableParams.reload();
-            });
-          })
-          .catch(function(error) {
-            console.log(error);
-          });
-      };
 
       $scope.model = {};
       $scope.BackendUrl = Api.BackendUrl;
@@ -66,6 +90,8 @@ angular.module('frontend')
             }
         });
       });
+
+
 
     }
   ]);

@@ -17,7 +17,7 @@ $ sails lift --verbose
 
 ##How to run E2E tests?
 ```sh
-$ sudo npm install grunt -g
+$ sudo npm install grunt-cli -g
 $ grunt test:e2e
 ```
 

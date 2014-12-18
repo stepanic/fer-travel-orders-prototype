@@ -1,0 +1,71 @@
+<div class="container">
+
+  <div ng-include="'components/navbar/navbar.html'"></div>
+
+
+  <div class="row">
+    <div class="col-md-12"  >
+      <div ng-show="data.length === 0" >
+        <h3>Trenutno nema putnih naloga za koje je potrebno Vaše odobrenje.</h3>
+      </div>
+
+      <div ng-show="data.length > 0" >
+        <table ng-table="tableParams" class="table" >
+          <tbody ng-repeat="p in $data">
+            <tr id="tr{{p.id}}" ng-class-odd="'odd'" ng-class-even="'even'">
+              <td class="rowTd" data-title="'ID'" sortable="'id'">{{p.id}}</td>
+              <td class="rowTd" align="center" data-title="'Početak'" sortable="'datetimeStart'">
+                {{p.datetimeStart | amDateFormat:'DD.MM.YYYY. HH:mm'}}
+              </td>
+              <td class="rowTd" align="center" data-title="'Kraj'" sortable="'datetimeFinish'">
+                {{p.datetimeFinish | amDateFormat:'DD.MM.YYYY. HH:mm'}}
+              </td>
+              <td class="rowTd" align="center" data-title="'Odobrio dekan'" sortable="'isAllowedByDean'">
+                {{p.isAllowedByDean ? 'DA' : 'NE'}}
+              </td>
+              <td class="rowTd" align="center" data-title="'Odobrio predstojnik'" sortable="'isAllowedByDepartmentHead'">
+                {{p.isAllowedByDepartmentHead ? 'DA' : 'NE'}}
+              </td>
+              <td class="rowTd" align="center" data-title="'Putni nalozi PDF'" >
+                <div ng-if="p.travelOrderPDFs.length !== 0" >
+                  <div ng-repeat="(key, pdf) in p.travelOrderPDFs" >
+                    <a ng-href="{{BackendUrl + '/' + pdf}}" target="_blank">
+                      Download&nbsp;v{{key + 1}}
+                    </a>
+                  </div>
+                </div>
+                <div ng-if="p.travelOrderPDFs.length === 0" >
+                  <span style="color: red" >NEMA</span>
+                </div>
+              </td>
+              <td class="rowTd" align="center" data-title="'Izveštaji PDF'" >
+                <div ng-if="p.travelOrderReportPDFs.length !== 0" >
+                  <div ng-repeat="(key, pdf) in p.travelOrderReportPDFs" >
+                    <a ng-href="{{BackendUrl + '/' + pdf}}" target="_blank">
+                      Download&nbsp;v{{key + 1}}
+                    </a>
+                  </div>
+                </div>
+                <div ng-if="p.travelOrderReportPDFs.length === 0" >
+                  <span style="color: red" >NEMA</span>
+                </div>
+              </td>
+              <td class="rowTd" align="center" >
+                <button class="btn btn-success btn-block" ng-click="Enable(p.id)" >
+                  <span>Odobriti</span>
+                  <span class="glyphicon glyphicon-ok" aria-hidden="true" style="top:2px;"></span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div ng-include="'components/footer/footer.html'"></div>
+
+
+</div>

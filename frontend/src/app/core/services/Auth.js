@@ -31,6 +31,14 @@
               'isAuthenticated': function() {
                 return Boolean(Storage.get('isAuthenticated'));
               },
+              'user': function() {
+                var user = JSON.parse(Storage.get('user'));
+                if (Boolean(user)) {
+                  return user;
+                } else {
+                  return null;
+                }
+              },
               'check': check,
               'login': login,
               'logout': function() {

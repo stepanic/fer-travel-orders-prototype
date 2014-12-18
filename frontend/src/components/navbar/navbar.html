@@ -17,6 +17,9 @@
         <li ng-show="isAuthenticated" ng-class="{active: (currentState === 'travelorderform')}">
           <a ng-href="#/travelorderform">Novi putni nalog</a>
         </li>
+        <li ng-show="isDean || isDepartmentHead" ng-class="{active: (currentState === 'travelorderenable')}">
+          <a ng-href="#/travelorderenable">Odobri putne naloge</a>
+        </li>
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
@@ -24,7 +27,7 @@
           <a ng-href="#/login">Prijava</a>
         </li>
         <li ng-show="isAuthenticated">
-          <a ng-click="logout()" style="cursor: pointer;">Odjava</a>
+          <a ng-click="logout()" style="cursor: pointer;">Odjava ({{user.firstName}} {{user.lastName}})</a>
         </li>
       </ul>
     </div>

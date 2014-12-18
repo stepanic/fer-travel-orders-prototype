@@ -13,15 +13,13 @@
           'BackendConfig',
           function ($http, Storage, BackendConfig) {
 
-            var defaultRequest = {
-              headers: {
-                username: Storage.get('username'),
-                password: Storage.get('password')
-              }
-            };
-
             function collection(model, where) {
-              var request = defaultRequest;
+              var request = {
+                headers: {
+                  username: Storage.get('username'), // Force read after login
+                  password: Storage.get('password')
+                }
+              };
               request.params = {
                 where: where
               };
@@ -40,8 +38,38 @@
                 .get(BackendConfig.url + '/api/travelorder/myall', request);
             }
 
+            function waitingApprove() {
+              var request = {
+                headers: {
+                  username: Storage.get('username'), // Force read after login
+                  password: Storage.get('password')
+                }
+              };
+              return $http
+                .get(BackendConfig.url + '/api/travelorder/waitingapprove', request);
+            }
+
+            function allow(id) {
+              var request = {
+                headers: {
+                  username: Storage.get('username'), // Force read after login
+                  password: Storage.get('password')
+                }
+              };
+              var data = {
+                travelorderid: id
+              };
+              return $http
+                .put(BackendConfig.url + '/api/travelorder/allow', data, request);
+            }
+
             function generatePDF(id, type) {
-              var request = defaultRequest;
+              var request = {
+                headers: {
+                  username: Storage.get('username'), // Force read after login
+                  password: Storage.get('password')
+                }
+              };
               var data = {
                 travelorderid: id,
                 type: type
@@ -55,7 +83,9 @@
             return {
               'collection': collection,
               'myTravelOrders': myTravelOrders,
+              'waitingApprove': waitingApprove,
               'generatePDF': generatePDF,
+              'allow': allow,
 
               'BackendUrl': BackendConfig.url
             };
