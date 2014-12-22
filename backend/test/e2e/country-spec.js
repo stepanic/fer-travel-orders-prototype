@@ -149,4 +149,45 @@ describe('Country CRUD', function() {
       done(e);
     });
   });
+
+  it('create-country Austria', function(done) {
+    console.log.verbose("Create Austria");
+    request({
+      url: "http://localhost:1337/api/country",
+      method: 'POST',
+      headers: {
+        token: 'mastersecret'
+      },
+      form: {
+        code: 'AT',
+        name: 'Austria',
+        dailyAllowanceCurrency: 'EUR',
+        dailyAllowanceSize: 70
+      }
+    }).then(function(response){
+
+      var result = response[0].toJSON();
+      var body = parseJSON(result.body);
+      console.log.verbose("body", body);
+      console.log.verbose("result", result);
+      console.log.verbose("result.body", result.body);
+
+      expect(result.statusCode).to.equal(200);
+      expect(body.id).to.exist;
+      expect(body.createdAt).to.exist;
+      expect(body.updatedAt).to.exist;
+      expect(body.code).to.equal('AT');
+      expect(body.name).to.equal('Austria');
+      expect(body.dailyAllowanceCurrency).to.equal('EUR');
+      expect(body.dailyAllowanceSize).to.equal(70);
+
+      share.countries[3] = body;
+
+      done();
+
+    }).catch(function(e){
+      console.log.verbose("Error", e);
+      done(e);
+    });
+  });
 });
