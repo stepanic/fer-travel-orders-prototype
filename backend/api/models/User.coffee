@@ -71,7 +71,10 @@ module.exports =
 
     verifyPassword: (password) ->
       bcrypt = require 'bcrypt'
-      return bcrypt.compareSync password, @password
+      if password and @password
+        return bcrypt.compareSync password, @password
+      else
+        return false
 
 
   beforeCreate: (values, cb) ->
