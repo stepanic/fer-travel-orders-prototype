@@ -86,11 +86,13 @@ angular.module('frontend',
       $rootScope.isAuthenticated = Auth.isAuthenticated();
       $rootScope.user = Auth.user();
 
-      if ($rootScope.user.roles.indexOf('DEAN') !== -1) {
-        $rootScope.isDean = true;
-      }
-      if ($rootScope.user.roles.indexOf('HEAD') !== -1) {
-        $rootScope.isDepartmentHead = true;
+      if ($rootScope.user && $rootScope.user.roles) {
+        if ($rootScope.user.roles.indexOf('DEAN') !== -1) {
+          $rootScope.isDean = true;
+        }
+        if ($rootScope.user.roles.indexOf('HEAD') !== -1) {
+          $rootScope.isDepartmentHead = true;
+        }
       }
 
       if ($rootScope.isAuthenticated !== true) {
