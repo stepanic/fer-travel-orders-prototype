@@ -50,6 +50,17 @@ module.exports =
                 toSplice = true
                 break
 
+          isAllowedByDepartmentHead = false
+          if not toSplice and isDean
+            for a in t.allowedBy
+              if 'HEAD' in a.roles
+                isAllowedByDepartmentHead = true
+                break
+            if not isAllowedByDepartmentHead
+              toSplice = true
+
+
+
           if toSplice
             travelorders.splice(i, 1)
           else
@@ -192,93 +203,94 @@ module.exports =
             width: 200
             align: 'left')
 
-          doc.font(fontBold).fontSize(14).text("Dnevnice:", 15, 270,
-            width: 200
-            align: 'left')
-          doc.font(fontNormal).fontSize(12).text("Puna dnevnica: #{t.country.dailyAllowanceSize} #{t.country.dailyAllowanceCurrency}", 100, 272,
-            width: 200
-            align: 'left')
-
-          total = 0
-          y = 290
-          for d in t.dailyAllowances
-            date = moment.utc d.datetime
-            dateInFormat = date.format "DD.MM.YYYY."
-
-            doc.font(fontNormal).fontSize(12).text("#{dateInFormat}", 15, y,
+          if type is 'report'
+            doc.font(fontBold).fontSize(14).text("Dnevnice:", 15, 270,
+              width: 200
+              align: 'left')
+            doc.font(fontNormal).fontSize(12).text("Puna dnevnica: #{t.country.dailyAllowanceSize} #{t.country.dailyAllowanceCurrency}", 100, 272,
               width: 200
               align: 'left')
 
-            cur = t.country.dailyAllowanceSize * d.size
-            total += cur
-            doc.font(fontNormal).fontSize(12).text("#{cur.toFixed(2)} #{t.country.dailyAllowanceCurrency}", 100, y,
+            total = 0
+            y = 290
+            for d in t.dailyAllowances
+              date = moment.utc d.datetime
+              dateInFormat = date.format "DD.MM.YYYY."
+
+              doc.font(fontNormal).fontSize(12).text("#{dateInFormat}", 15, y,
+                width: 200
+                align: 'left')
+
+              cur = t.country.dailyAllowanceSize * d.size
+              total += cur
+              doc.font(fontNormal).fontSize(12).text("#{cur.toFixed(2)} #{t.country.dailyAllowanceCurrency}", 100, y,
+                width: 200
+                align: 'left')
+
+              y += 20
+            y1 = y
+            totalDailyAllowances = total
+
+            doc.font(fontBold).fontSize(12).text("UKUPNO:", 15, y,
+              width: 200
+              align: 'left')
+            doc.font(fontBold).fontSize(12).text("#{total.toFixed(2)} #{t.country.dailyAllowanceCurrency}", 100, y,
               width: 200
               align: 'left')
 
-            y += 20
-          y1 = y
-          totalDailyAllowances = total
 
-          doc.font(fontBold).fontSize(12).text("UKUPNO:", 15, y,
-            width: 200
-            align: 'left')
-          doc.font(fontBold).fontSize(12).text("#{total.toFixed(2)} #{t.country.dailyAllowanceCurrency}", 100, y,
-            width: 200
-            align: 'left')
-
-
-          doc.font(fontBold).fontSize(14).text("Troškovi:", 280, 270,
-            width: 200
-            align: 'left')
-
-          total = 0
-          y = 290
-          for item in t.items
-            doc.font(fontNormal).fontSize(12).text("#{item.name}", 280, y,
+            doc.font(fontBold).fontSize(14).text("Troškovi:", 280, 270,
               width: 200
               align: 'left')
 
-            doc.font(fontNormal).fontSize(12).text("#{item.quantity}kom", 390, y,
+            total = 0
+            y = 290
+            for item in t.items
+              doc.font(fontNormal).fontSize(12).text("#{item.name}", 280, y,
+                width: 200
+                align: 'left')
+
+              doc.font(fontNormal).fontSize(12).text("#{item.quantity}kom", 390, y,
+                width: 200
+                align: 'left')
+
+              cur = item.price * item.quantity
+              doc.font(fontNormal).fontSize(12).text("#{cur.toFixed(2)} #{item.currency}", 440, y,
+                width: 200
+                align: 'left')
+
+              # Convert to TravelOrder.country.dailyAllowanceCurrency
+              if item.currency isnt t.country.dailyAllowanceCurrency
+                cur = cur * currencies[item.currency].exchangeRateToHRK / currencies[t.country.dailyAllowanceCurrency].exchangeRateToHRK
+
+              total += cur
+
+              doc.font(fontNormal).fontSize(12).text("#{cur.toFixed(2)} #{t.country.dailyAllowanceCurrency}", 525, y,
+                width: 200
+                align: 'left')
+
+              y += 20
+            y2 = y
+            totalExpenses = total
+
+            doc.font(fontBold).fontSize(12).text("UKUPNO:", 280, y,
+              width: 200
+              align: 'left')
+            doc.font(fontBold).fontSize(12).text("#{total.toFixed(2)} #{t.country.dailyAllowanceCurrency}", 525, y,
               width: 200
               align: 'left')
 
-            cur = item.price * item.quantity
-            doc.font(fontNormal).fontSize(12).text("#{cur.toFixed(2)} #{item.currency}", 440, y,
+            # Continue text after longest column
+            y = Math.max y1, y2
+            y += 30
+
+            doc.font(fontBold).fontSize(12).text("RAZLIKA: Dnevnice - Troškovi = ", 15, y,
               width: 200
               align: 'left')
 
-            # Convert to TravelOrder.country.dailyAllowanceCurrency
-            if item.currency isnt t.country.dailyAllowanceCurrency
-              cur = cur * currencies[item.currency].exchangeRateToHRK / currencies[t.country.dailyAllowanceCurrency].exchangeRateToHRK
-
-            total += cur
-
-            doc.font(fontNormal).fontSize(12).text("#{cur.toFixed(2)} #{t.country.dailyAllowanceCurrency}", 525, y,
+            doc.font(fontBold).fontSize(12).text("#{(totalDailyAllowances - totalExpenses).toFixed(2)} #{t.country.dailyAllowanceCurrency}", 200, y,
               width: 200
               align: 'left')
-
-            y += 20
-          y2 = y
-          totalExpenses = total
-
-          doc.font(fontBold).fontSize(12).text("UKUPNO:", 280, y,
-            width: 200
-            align: 'left')
-          doc.font(fontBold).fontSize(12).text("#{total.toFixed(2)} #{t.country.dailyAllowanceCurrency}", 525, y,
-            width: 200
-            align: 'left')
-
-          # Continue text after longest column
-          y = Math.max y1, y2
-          y += 30
-
-          doc.font(fontBold).fontSize(12).text("RAZLIKA: Dnevnice - Troškovi = ", 15, y,
-            width: 200
-            align: 'left')
-
-          doc.font(fontBold).fontSize(12).text("#{(totalDailyAllowances - totalExpenses).toFixed(2)} #{t.country.dailyAllowanceCurrency}", 200, y,
-            width: 200
-            align: 'left')
 
           # Footer
           ownerSign = "#{t.owner.title} #{t.owner.firstName} #{t.owner.lastName}"
